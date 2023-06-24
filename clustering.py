@@ -1,8 +1,8 @@
 from sklearn.cluster import KMeans
 
 
-def run_kmeans(exp_3, sentences_vectors, categories_all_vectors, exp_names, K):
-    kmeans = KMeans(n_clusters=K)
+def run_kmeans(exp_3, sentences_vectors, categories_all_vectors, exp_names, k):
+    kmeans = KMeans(n_clusters=k)
     kmeans.fit(sentences_vectors)
     cluster_number = kmeans.labels_
     # centroids = kmeans.cluster_centers_
@@ -21,7 +21,7 @@ def run_kmeans(exp_3, sentences_vectors, categories_all_vectors, exp_names, K):
     for category in exp_names:
         chosen_cluster = -1
         max_appearance = 0
-        for point in range(K):
+        for point in range(k):
             if category not in clusters_dict[point].keys():
                 pass
             else:

@@ -55,9 +55,9 @@ def run_all(vectors, exp_names, k: int, vector_type: str):
 
 if __name__ == "__main__":
     k = 2
-    exp_1 = Experiment(exp_num=1)
-    exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
-    exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
+    # exp_1 = Experiment(exp_num=1)
+    # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
+    exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
     # vec of 384 categories
     categories_all_vectors = vector_to_category(exp_3.glove_vectors)
@@ -68,12 +68,12 @@ if __name__ == "__main__":
         k=k,
         vector_type="Glove",
     )
-    run_all(
-        vectors=exp_3.bert_vectors,
-        exp_names=exp_3.categories_names,
-        k=k,
-        vector_type="BERT",
-    )
+    # run_all(
+    #     vectors=exp_3.bert_vectors,
+    #     exp_names=exp_3.categories_names,
+    #     k=k,
+    #     vector_type="BERT",
+    # )
     run_all(
         vectors=exp_3.fmri_data,
         exp_names=exp_3.categories_names,

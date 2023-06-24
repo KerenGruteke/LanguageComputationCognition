@@ -28,34 +28,34 @@ def decode_brain_to_BERT():
     glove_test_exp2 = exp_2.glove_vectors[train_rows:, :]
     # --------------------------------------------------------------------------------------------- exp2 train and test
 
-    BERT_decoder_train = learn_decoder(exp_2.fmri_data, BERT_train_exp2)
-    print("------ part 2 - BERT representation score in exp2- train and test----------")
-    accuracy, poor_rank, high_rank, extremely_high_rank = rank_based_accuracy_exp(
-        fmri_data=exp_2.fmri_data,
-        exp_vectors=BERT_test_exp2,
-        train_M=BERT_decoder_train,
-        exp_dict=exp_2,
-    )
+    # BERT_decoder_train = learn_decoder(Fmridata_train_exp2, BERT_train_exp2)
+    # print("------ part 2 - BERT representation score in exp2- train and test----------")
+    # accuracy, poor_rank, high_rank, extremely_high_rank = rank_based_accuracy_exp(
+    #     fmri_data=exp_2.fmri_data,
+    #     exp_vectors=BERT_test_exp2,
+    #     train_M=BERT_decoder_train,
+    #     exp_dict=exp_2,
+    # )
 
-    print(f"avg accuracy over all data: {round(np.mean(accuracy), 3)}")
+    # print(f"avg accuracy over all data: {round(np.mean(accuracy), 3)}")
 
-    glove_decoder_train = learn_decoder(Fmridata_train_exp2, glove_train_exp2)
-    print(
-        "------ part 2 - paper representation score in exp2- train and test----------"
-    )
-    accuracy, poor_rank, high_rank, extremely_high_rank = rank_based_accuracy_exp(
-        fmri_data=Fmridata_test_exp2,
-        exp_vectors=glove_test_exp2,
-        train_M=glove_decoder_train,
-        exp_dict=exp_2,
-    )
-    print(f"avg accuracy over all data: {round(np.mean(accuracy), 3)}")
+    # glove_decoder_train = learn_decoder(Fmridata_train_exp2, glove_train_exp2)
+    # print(
+    #     "------ part 2 - paper representation score in exp2- train and test----------"
+    # )
+    # accuracy, poor_rank, high_rank, extremely_high_rank = rank_based_accuracy_exp(
+    #     fmri_data=Fmridata_test_exp2,
+    #     exp_vectors=glove_test_exp2,
+    #     train_M=glove_decoder_train,
+    #     exp_dict=exp_2,
+    # )
+    # print(f"avg accuracy over all data: {round(np.mean(accuracy), 3)}")
     # ------------------------------------------------------------------------------------------------------------- exp3
-    BERT_decoder = learn_decoder(exp_2.fmri_data, exp_2.sentences_bert_vecs)
+    BERT_decoder = learn_decoder(exp_2.fmri_data, exp_2.bert_vectors)
     print("------ part 2 - BERT representation score in ex3----------")
     accuracy, poor_rank, high_rank, extremely_high_rank = rank_based_accuracy_exp(
         fmri_data=exp_3.fmri_data,
-        exp_vectors=exp_3.sentences_bert_vecs,
+        exp_vectors=exp_3.bert_vectors,
         train_M=BERT_decoder,
         exp_dict=exp_3,
     )
