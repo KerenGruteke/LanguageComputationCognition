@@ -18,10 +18,6 @@ def run_clustering_before_reduction(
     before_after = "before"
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
-    # method = "PCA"
-    # method = "TSNE"
-    method = "UMAP"
-
     # --- regular ---
     cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
         exp=exp, avg_categories=False, vectors=vectors, vector_type=vector_type, k=k
@@ -130,14 +126,14 @@ if __name__ == "__main__":
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
-    for k in [12]:
-        for method in ["PCA", "TSNE", "UMAP"]:
+    for method in ["TSNE"]:
+        for k in [8, 10]:
             run_clustering_before_reduction(
                 exp=exp_3, vector_type="Glove", k=k, method=method
             )
-            run_clustering_after_reduction(
-                exp=exp_3, vector_type="Glove", k=k, method=method
-            )
+            # run_clustering_after_reduction(
+            #     exp=exp_3, vector_type="Glove", k=k, method=method
+            # )
             # run_clustering_before_reduction(
             #     exp=exp_3,
             #     vector_type="BERT",
