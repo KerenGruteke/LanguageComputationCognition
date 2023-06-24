@@ -26,3 +26,4 @@ data/vectors_243sentences.GV42B300.average.txt
 data/vectors_384sentences.GV42B300.average.txt
 results/Glove Elbow Method best_k=11.jpg
 results/Glove Silhouette Method best_k=2.jpg
+results/Glove Elbow Method best_k=12.jpg

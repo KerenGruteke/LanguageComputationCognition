@@ -22,7 +22,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
 
     reduce_dimension_and_plot(
         method=method,
-        vectors_metrix=vectors,
+        vectors_matrix=vectors,
         names=exp.categories_all_vectors,
         labels=cluster_nums_of_all_vectors,
         vector_type=vector_type,
@@ -32,7 +32,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
     )
     reduce_dimension_and_plot(
         method=method,
-        vectors_metrix=np.array(avg_vectors_per_category),
+        vectors_matrix=np.array(avg_vectors_per_category),
         names=exp.categories_names,
         labels=list(category_to_cluster.values()),
         vector_type=f"{vector_type}_avg",

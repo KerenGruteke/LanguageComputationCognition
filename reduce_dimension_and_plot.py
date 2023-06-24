@@ -99,6 +99,7 @@ def plot_reduced_vectors_with_labels(
     plt.ylabel(f"{method} Component 2")
     plt.title(f"{method} {vector_type} k={k}")
     plt.savefig(RESULTS_PATH / f"{method} {vector_type} k={k}.jpg")
+    plt.clf()
 
     df = pd.DataFrame(data={"names": names, "labels": labels})
     df_sorted = df.sort_values(by=["labels", "names"])

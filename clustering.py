@@ -48,6 +48,7 @@ def best_k_kmeans(vectors, vector_type):
     plt.savefig(
         RESULTS_PATH / f"{vector_type} Silhouette Method best_k={best_k_silo}.jpg"
     )
+    plt.clf()
 
     print(f"{best_k_wscc=}")
     return best_k_wscc
