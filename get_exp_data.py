@@ -9,6 +9,9 @@ from learn_decoder import read_matrix
 EXP_1_PARAMS = {
     "glove_vectors_path": "vectors_180concepts.GV42B300.txt",
     "stimuli_text_path": "stimuli_180concepts.txt",
+    "poor_rank_threshold": 160,
+    "high_rank_threshold": 15,
+    "extremely_rank_threshold": 5,
 }
 
 EXP_2_PARAMS = {
@@ -29,9 +32,9 @@ EXP_3_PARAMS = {
     "extremely_rank_threshold": 5,
 }
 
-EXP_PARAMS_BY_EXP_NUM = {2: EXP_2_PARAMS, 3: EXP_3_PARAMS}
+EXP_PARAMS_BY_EXP_NUM = {1: EXP_1_PARAMS, 2: EXP_2_PARAMS, 3: EXP_3_PARAMS}
 
-DATA_PATH = Path("~").expanduser() / "data"
+DATA_PATH = Path("data")
 
 
 class Experiment:
@@ -43,14 +46,14 @@ class Experiment:
         self.high_rank_threshold = exp_params["high_rank_threshold"]
         self.extremely_rank_threshold = exp_params["extremely_rank_threshold"]
 
-        pickle_path = DATA_PATH / exp_params["pickle_path"]
         glove_vectors_path = DATA_PATH / exp_params["glove_vectors_path"]
         stimuli_text_path = DATA_PATH / exp_params["stimuli_text_path"]
 
-        with open(pickle_path, "rb") as f:
-            exp_data = pickle.load(f)
-
         if exp_num == 2 or exp_num == 3:
+            pickle_path = DATA_PATH / exp_params["pickle_path"]
+            with open(pickle_path, "rb") as f:
+                exp_data = pickle.load(f)
+
             self.keyPassageCategory = exp_data["keyPassageCategory"]
             self.labelsPassageCategory = exp_data["labelsPassageCategory"]
             self.labelsPassageForEachSentence = exp_data["labelsPassageForEachSentence"]
@@ -70,7 +73,7 @@ class Experiment:
             self.stimuli_text = np.genfromtxt(stimuli_text_path, dtype=np.dtype("U"))
             self.glove_vectors = read_matrix(glove_vectors_path, sep=" ")
             # replace FMRI data because have bug in original file
-            self.fmri_data = read_matrix("modified_file.csv", sep=",")
+            self.fmri_data = read_matrix(DATA_PATH / "modified_file.csv", sep=",")
 
         if get_bert_decoding:
             sentences_exp = [sentence.strip() for sentence in stimuli_text]

@@ -28,10 +28,10 @@ def decode_brain_to_glove():
         print(f"avg accuracy over all data: {round(np.mean(accuracy), 3)}")
 
         print(
-            f"best_categories for exp 2: {get_best_worse_topics(extremely_high_rank, exp)}"
+            f"categories with rank < {exp.extremely_rank_threshold}: {get_best_worse_topics(extremely_high_rank, exp)}"
         )
-        print(f"mid_categories for exp 2: {get_best_worse_topics(high_rank, exp)}")
-        print(f"worse_categories for exp 2: {get_best_worse_topics(poor_rank, exp)}")
+        print(f"categories with rank between {exp.high_rank_threshold} - {exp.extremely_rank_threshold}: {get_best_worse_topics(high_rank, exp)}")
+        print(f"categories with rank > {exp.poor_rank_threshold}: {get_best_worse_topics(poor_rank, exp)}")
 
 
 if __name__ == "__main__":

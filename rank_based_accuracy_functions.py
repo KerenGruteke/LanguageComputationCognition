@@ -33,7 +33,7 @@ def rank_based_accuracy_exp(fmri_data, exp_vectors, train_M, exp_dict: Experimen
         rank_list.append(rank)
         if rank >= exp_dict.poor_rank_threshold:
             poor_rank_idx.append(vec_index)
-        if rank <= exp_dict.high_rank_threshold:
+        if rank <= exp_dict.high_rank_threshold and rank >= exp_dict.extremely_rank_threshold:
             high_rank_idx.append(vec_index)
         if rank <= exp_dict.extremely_rank_threshold:
             extremely_high_idx.append(vec_index)
@@ -53,4 +53,4 @@ def get_best_worse_topics(special_idx_exp: List, exp: Experiment):
             categories[category_name] = 1
         else:
             categories[category_name] += 1
-    return categories
+    return list(categories.keys())

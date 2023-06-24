@@ -13,10 +13,6 @@ def read_matrix(filename, sep=","):
     return np.array(lines)
 
 
-data = read_matrix("imaging_data.csv", sep=",")
-vectors = read_matrix("vectors_180concepts.GV42B300.txt", sep=" ")
-
-
 def learn_decoder(data, vectors):
     """Given data (a CxV matrix of V voxel activations per C concepts)
     and vectors (a CxD matrix of D semantic dimensions per C concepts)
