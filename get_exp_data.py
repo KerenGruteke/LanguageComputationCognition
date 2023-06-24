@@ -65,6 +65,12 @@ class Experiment:
             self.glove_vectors = read_matrix(glove_vectors_path, sep=" ")
             self.categories_names = [arr[0] for arr in self.keyPassageCategory[0]]
             self.categories_all_vectors = self.vector_to_category()
+            self.avg_glove_vectors_by_category = self.get_avg_vectors_per_category(
+                self.glove_vectors
+            )
+            self.avg_fmri_vectors_by_category = self.get_avg_vectors_per_category(
+                self.fmri_data
+            )
 
             with open(stimuli_text_path, "r") as file:
                 stimuli_text = file.readlines()
@@ -79,6 +85,9 @@ class Experiment:
         if get_bert_decoding:
             sentences_exp = [sentence.strip() for sentence in stimuli_text]
             self.bert_vectors = extract_sentence_representation(sentences_exp)
+            self.avg_bert_vectors_by_category = self.get_avg_vectors_per_category(
+                self.bert_vectors
+            )
 
     def vector_to_category(self):
         vec_to_category = []
@@ -89,3 +98,33 @@ class Experiment:
             category_name = self.keyPassageCategory[0][category_idx - 1][0]
             vec_to_category.append(category_name)
         return vec_to_category
+
+    def get_avg_vectors_per_category(self, vectors):
+        avg_vectors_per_category = {}
+        for idx, vec in enumerate(vectors):
+            name = self.categories_all_vectors[idx]
+            if name not in avg_vectors_per_category.keys():
+                avg_vectors_per_category[name] = [vec, 1]
+            else:
+                avg_vectors_per_category[name][0] += vec
+                avg_vectors_per_category[name][1] += 1
+
+        avg_vectors_per_category_list = []
+        for category_values in avg_vectors_per_category.values():
+            avg = [x / category_values[1] for x in category_values[0]]
+            avg_vectors_per_category_list.append(avg)
+
+        return avg_vectors_per_category_list
+
+    def get_vectors_by_type(self, vector_type: str):
+        if vector_type == "Glove":
+            vectors = self.glove_vectors
+            avg_vectors_per_category = self.avg_glove_vectors_by_category
+        elif vector_type == "BERT":
+            vectors = self.bert_vectors
+            avg_vectors_per_category = self.avg_bert_vectors_by_category
+        elif vector_type == "fMRI":
+            vectors = self.fmri_data
+            avg_vectors_per_category = self.avg_fmri_vectors_by_category
+
+        return vectors, avg_vectors_per_category

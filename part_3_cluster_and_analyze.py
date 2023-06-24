@@ -7,12 +7,12 @@ from reduce_dimension_and_plot import reduce_dimension_and_plot
 # -----------------------------------------------------------------------------------------------------------------
 
 
-def run_all(exp: Experiment, vectors, k: int, vector_type: str):
-    (
-        clusters_per_vec,
-        avg_vectors_per_category_list,
-        category_to_cluster,
-    ) = run_kmeans(exp=exp, vectors=vectors, k=k)
+def run_all(exp: Experiment, vector_type: str, k: int):
+    vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
+
+    cluster_nums_of_all_vectors, category_to_cluster = run_kmeans(
+        exp=exp, vectors=vectors, k=k
+    )
 
     method = "PCA"
     # method = "TSNE"
@@ -22,14 +22,14 @@ def run_all(exp: Experiment, vectors, k: int, vector_type: str):
         method=method,
         vectors_metrix=vectors,
         names=exp.categories_all_vectors,
-        labels=clusters_per_vec,
+        labels=cluster_nums_of_all_vectors,
         vector_type=vector_type,
         k=k,
         plot_names=False,
     )
     reduce_dimension_and_plot(
         method=method,
-        vectors_metrix=np.array(avg_vectors_per_category_list),
+        vectors_metrix=np.array(avg_vectors_per_category),
         names=exp.categories_names,
         labels=list(category_to_cluster.values()),
         vector_type=f"{vector_type}_avg",
@@ -46,19 +46,16 @@ if __name__ == "__main__":
 
     run_all(
         exp=exp_3,
-        vectors=exp_3.glove_vectors,
         vector_type="Glove",
         k=k,
     )
     # run_all(
     #     exp=exp_3,
-    #     vectors=exp_3.bert_vectors,
     #     vector_type="BERT",
     #     k=k,
     # )
     run_all(
         exp=exp_3,
-        vectors=exp_3.fmri_data,
         vector_type="fMRI",
         k=k,
     )
