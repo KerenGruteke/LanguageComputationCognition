@@ -2,10 +2,12 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn import preprocessing  # to normalise existing X
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 from get_exp_data import Experiment
+from rank_based_accuracy_functions import cosine_similarity
 
 RESULTS_PATH = Path("results")
 
@@ -64,8 +66,10 @@ def run_kmeans(
 
     if not k:
         k = best_k_kmeans(vectors=vectors, vector_type=vector_type)
-    kmeans = KMeans(n_clusters=k)
-    kmeans.fit(vectors)
+
+    kmeans = KMeans(n_clusters=k, metric=cosine_similarity)
+    norm_vectors = preprocessing.normalize(vectors)
+    kmeans.fit(norm_vectors)
     clusters_numbers = kmeans.labels_
     # centroids = kmeans.cluster_centers_
 

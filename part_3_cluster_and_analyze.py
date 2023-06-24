@@ -130,7 +130,8 @@ if __name__ == "__main__":
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
-    for k in [None, 2, 5, 6]:
+    # None, 2, 5,
+    for k in [6]:
         run_clustering_before_reduction(
             exp=exp_3,
             vector_type="Glove",
