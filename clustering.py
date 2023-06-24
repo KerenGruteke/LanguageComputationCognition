@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics import silhouette_score
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
-from main import Experiment
+
 
 def best_k_kmeans(sentences_vectors):
     np.random.seed(42)
