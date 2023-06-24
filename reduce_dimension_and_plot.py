@@ -20,6 +20,7 @@ def reduce_dimension_and_plot(
     labels,
     vector_type,
     k,
+    plot=True,
     plot_names=True,
 ):
     """
@@ -51,6 +52,21 @@ def reduce_dimension_and_plot(
         print("explained variance ratio:\n")
         print(reduce_model.explained_variance_ratio_)
 
+    if plot:
+        plot_reduced_vectors_with_labels(
+            method=method,
+            vector_type=vector_type,
+            k=k,
+            labels=labels,
+            names=names,
+            X_reduced=X_reduced,
+            plot_names=plot_names,
+        )
+
+
+def plot_reduced_vectors_with_labels(
+    method, vector_type, k, labels, names, X_reduced, plot_names
+):
     # Plot the t-SNE results with sample names and color-coded class labels
     fig, ax = plt.subplots()
     colors_list = sns.color_palette("husl", len(set(labels)))

@@ -1,5 +1,6 @@
-import numpy as np
 import random
+
+import numpy as np
 
 from clustering import run_kmeans
 from get_exp_data import Experiment
@@ -27,6 +28,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
         labels=cluster_nums_of_all_vectors,
         vector_type=vector_type,
         k=k,
+        plot=True,
         plot_names=False,
     )
     reduce_dimension_and_plot(
@@ -36,6 +38,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
         labels=list(category_to_cluster.values()),
         vector_type=f"{vector_type}_avg",
         k=k,
+        plot=True,
         plot_names=True,
     )
 

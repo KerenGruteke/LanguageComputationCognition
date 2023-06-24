@@ -36,6 +36,7 @@ def best_k_kmeans(vectors, vector_type):
     best_k_wscc = diff.index(max(diff)) + 2
 
     plt.savefig(RESULTS_PATH / f"{vector_type} Elbow Method best_k={best_k_wscc}.jpg")
+    plt.clf()
 
     # Plot the silhouette scores
     plt.plot(k_values, silhouette_scores, marker="o")
