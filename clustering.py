@@ -1,9 +1,51 @@
 from sklearn.cluster import KMeans
-
 from get_exp_data import Experiment
+import numpy as np
+from sklearn.metrics import silhouette_score
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from main import Experiment
 
+def best_k_kmeans(sentences_vectors):
+    np.random.seed(42)
+    k_values = range(2, 15)
+    wcss = []
+    silhouette_scores = []
+    for k in k_values:
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(sentences_vectors)
+        wcss.append(kmeans.inertia_)
+        labels = kmeans.labels_
+        silhouette_scores.append(silhouette_score(sentences_vectors, labels))
 
-def run_kmeans(exp: Experiment, vectors, k: int):
+    # Plot the WCSS values
+    plt.plot(k_values, wcss, marker='o')
+    plt.xlabel('Number of Clusters (K)')
+    plt.ylabel('WCSS')
+    plt.title('Elbow Method')
+    plt.show()
+
+    # Find the best value of K
+    diff = []
+    for i in range(1, len(wcss)):
+        diff.append(wcss[i] - wcss[i - 1])
+
+    best_k_wscc = diff.index(max(diff)) + 2
+
+    # Plot the silhouette scores
+    plt.plot(k_values, silhouette_scores, marker='o')
+    plt.xlabel('Number of Clusters (K)')
+    plt.ylabel('Silhouette Score')
+    plt.title('Silhouette Method')
+    plt.show()
+
+    best_k_silo = k_values[silhouette_scores.index(max(silhouette_scores))]
+
+    return best_k_wscc
+
+def run_kmeans(exp: Experiment, vectors, k: int=None):
+    if not k:
+        k = best_k_kmeans(vectors)
     kmeans = KMeans(n_clusters=k)
     kmeans.fit(vectors)
     clusters_numbers = kmeans.labels_
