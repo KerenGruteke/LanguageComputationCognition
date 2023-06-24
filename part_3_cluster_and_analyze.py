@@ -16,8 +16,8 @@ def run_clustering_before_reduction(exp: Experiment, vector_type: str, k: int):
     before_after = "before"
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
-    # method = "PCA"
-    method = "TSNE"
+    method = "PCA"
+    # method = "TSNE"
     # method = "UMAP"
 
     # --- regular ---
@@ -27,7 +27,6 @@ def run_clustering_before_reduction(exp: Experiment, vector_type: str, k: int):
     X_reduced = reduce_dimension_and_plot(
         method=method,
         vectors_matrix=vectors,
-        vector_type=vector_type,
     )
     plot_reduced_vectors_with_labels(
         method=method,
@@ -36,20 +35,22 @@ def run_clustering_before_reduction(exp: Experiment, vector_type: str, k: int):
         labels=cluster_nums_of_all_vectors,
         names=exp.categories_all_vectors,
         X_reduced=X_reduced,
-        plot_names=True,
+        plot_names=False,
         before_after=before_after,
     )
 
     # --- avg ---
-    cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
-        exp=exp, avg_categories=True, vectors=vectors, vector_type=vector_type, k=k
-    )
-
     vector_type = f"{vector_type}_avg"
-    reduce_dimension_and_plot(
+    cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
+        exp=exp,
+        avg_categories=True,
+        vectors=avg_vectors_per_category,
+        vector_type=vector_type,
+        k=k,
+    )
+    avg_X_reduced = reduce_dimension_and_plot(
         method=method,
         vectors_matrix=np.array(avg_vectors_per_category),
-        vector_type=vector_type,
     )
     plot_reduced_vectors_with_labels(
         method=method,
@@ -57,7 +58,7 @@ def run_clustering_before_reduction(exp: Experiment, vector_type: str, k: int):
         k=k,
         labels=list(category_to_cluster.values()),
         names=exp.categories_names,
-        X_reduced=X_reduced,
+        X_reduced=avg_X_reduced,
         plot_names=True,
         before_after=before_after,
     )
@@ -67,8 +68,8 @@ def run_clustering_after_reduction(exp: Experiment, vector_type: str, k: int):
     before_after = "after"
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
-    # method = "PCA"
-    method = "TSNE"
+    method = "PCA"
+    # method = "TSNE"
     # method = "UMAP"
 
     # --- regular ---
@@ -91,7 +92,7 @@ def run_clustering_after_reduction(exp: Experiment, vector_type: str, k: int):
         labels=cluster_nums_of_all_vectors,
         names=exp.categories_all_vectors,
         X_reduced=X_reduced,
-        plot_names=True,
+        plot_names=False,
         before_after=before_after,
     )
 
@@ -129,7 +130,7 @@ if __name__ == "__main__":
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
-    for k in [None, 5, 6]:
+    for k in [None, 2, 5, 6]:
         run_clustering_before_reduction(
             exp=exp_3,
             vector_type="Glove",
