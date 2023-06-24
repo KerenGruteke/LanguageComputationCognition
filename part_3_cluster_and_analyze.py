@@ -12,7 +12,9 @@ from reduce_dimension_and_plot import (
 # -----------------------------------------------------------------------------------------------------------------
 
 
-def run_clustering_before_reduction(exp: Experiment, vector_type: str, k: int):
+def run_clustering_before_reduction(
+    exp: Experiment, vector_type: str, k: int, method: str
+):
     before_after = "before"
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
@@ -64,13 +66,11 @@ def run_clustering_before_reduction(exp: Experiment, vector_type: str, k: int):
     )
 
 
-def run_clustering_after_reduction(exp: Experiment, vector_type: str, k: int):
+def run_clustering_after_reduction(
+    exp: Experiment, vector_type: str, k: int, method: str
+):
     before_after = "after"
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
-
-    # method = "PCA"
-    # method = "TSNE"
-    method = "UMAP"
 
     # --- regular ---
     X_reduced = reduce_dimension_and_plot(
@@ -131,23 +131,20 @@ if __name__ == "__main__":
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
     for k in [12]:
-        run_clustering_before_reduction(
-            exp=exp_3,
-            vector_type="Glove",
-            k=k,
-        )
-        run_clustering_after_reduction(
-            exp=exp_3,
-            vector_type="Glove",
-            k=k,
-        )
-        # run_clustering_before_reduction(
-        #     exp=exp_3,
-        #     vector_type="BERT",
-        #     k=k,
-        # )
-        # run_clustering_before_reduction(
-        #     exp=exp_3,
-        #     vector_type="fMRI",
-        #     k=k,
-        # )
+        for method in ["PCA", "TSNE", "UMAP"]:
+            run_clustering_before_reduction(
+                exp=exp_3, vector_type="Glove", k=k, method=method
+            )
+            run_clustering_after_reduction(
+                exp=exp_3, vector_type="Glove", k=k, method=method
+            )
+            # run_clustering_before_reduction(
+            #     exp=exp_3,
+            #     vector_type="BERT",
+            #     k=k,
+            # )
+            # run_clustering_before_reduction(
+            #     exp=exp_3,
+            #     vector_type="fMRI",
+            #     k=k,
+            # )
