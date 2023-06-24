@@ -35,4 +35,4 @@ def linear_regression_model(fMRI_data, embeddings):
         print(f"{SST=}")
         print(f"{SSres=}")
         print(f"{R_squared=}")
-    return R_squared
+    return R_squared 
