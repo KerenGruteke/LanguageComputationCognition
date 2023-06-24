@@ -15,7 +15,7 @@ def decode_brain_to_glove():
 
     # train on exp 1 data
     train_M = learn_decoder(exp_1.fmri_data, exp_1.glove_vectors)
-    print(f"{train_M.shape=}")
+    # print(f"{train_M.shape=}")
 
     for exp in [exp_2, exp_3]:
         print(f"--------- EXP_{exp.exp_num} ----------")
