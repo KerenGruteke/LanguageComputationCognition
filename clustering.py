@@ -1,29 +1,32 @@
-from sklearn.cluster import KMeans
-from get_exp_data import Experiment
-import numpy as np
-from sklearn.metrics import silhouette_score
-from sklearn.cluster import KMeans
+from pathlib import Path
+
 import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+from get_exp_data import Experiment
+
+RESULTS_PATH = Path("results")
 
 
-def best_k_kmeans(sentences_vectors):
+def best_k_kmeans(vectors, vector_type):
     np.random.seed(42)
     k_values = range(2, 15)
     wcss = []
     silhouette_scores = []
     for k in k_values:
         kmeans = KMeans(n_clusters=k)
-        kmeans.fit(sentences_vectors)
+        kmeans.fit(vectors)
         wcss.append(kmeans.inertia_)
         labels = kmeans.labels_
-        silhouette_scores.append(silhouette_score(sentences_vectors, labels))
+        silhouette_scores.append(silhouette_score(vectors, labels))
 
     # Plot the WCSS values
-    plt.plot(k_values, wcss, marker='o')
-    plt.xlabel('Number of Clusters (K)')
-    plt.ylabel('WCSS')
-    plt.title('Elbow Method')
-    plt.show()
+    plt.plot(k_values, wcss, marker="o")
+    plt.xlabel("Number of Clusters (K)")
+    plt.ylabel("WCSS")
+    plt.title("Elbow Method")
 
     # Find the best value of K
     diff = []
@@ -32,20 +35,27 @@ def best_k_kmeans(sentences_vectors):
 
     best_k_wscc = diff.index(max(diff)) + 2
 
+    plt.savefig(RESULTS_PATH / f"{vector_type} Elbow Method best_k={best_k_wscc}.jpg")
+    plt.clf()
+
     # Plot the silhouette scores
-    plt.plot(k_values, silhouette_scores, marker='o')
-    plt.xlabel('Number of Clusters (K)')
-    plt.ylabel('Silhouette Score')
-    plt.title('Silhouette Method')
-    plt.show()
+    plt.plot(k_values, silhouette_scores, marker="o")
+    plt.xlabel("Number of Clusters (K)")
+    plt.ylabel("Silhouette Score")
+    plt.title("Silhouette Method")
 
     best_k_silo = k_values[silhouette_scores.index(max(silhouette_scores))]
+    plt.savefig(
+        RESULTS_PATH / f"{vector_type} Silhouette Method best_k={best_k_silo}.jpg"
+    )
 
+    print(f"{best_k_wscc=}")
     return best_k_wscc
 
-def run_kmeans(exp: Experiment, vectors, k: int=None):
+
+def run_kmeans(exp: Experiment, vectors, vector_type: str, k: int = None):
     if not k:
-        k = best_k_kmeans(vectors)
+        k = best_k_kmeans(vectors=vectors, vector_type=vector_type)
     kmeans = KMeans(n_clusters=k)
     kmeans.fit(vectors)
     clusters_numbers = kmeans.labels_

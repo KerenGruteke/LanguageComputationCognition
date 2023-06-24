@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 
 from clustering import run_kmeans
@@ -11,7 +13,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
     cluster_nums_of_all_vectors, category_to_cluster = run_kmeans(
-        exp=exp, vectors=vectors, k=k
+        exp=exp, vectors=vectors, vector_type=vector_type, k=k
     )
 
     # method = "PCA"
@@ -25,6 +27,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
         labels=cluster_nums_of_all_vectors,
         vector_type=vector_type,
         k=k,
+        plot=True,
         plot_names=False,
     )
     reduce_dimension_and_plot(
@@ -34,12 +37,14 @@ def run_all(exp: Experiment, vector_type: str, k: int):
         labels=list(category_to_cluster.values()),
         vector_type=f"{vector_type}_avg",
         k=k,
+        plot=True,
         plot_names=True,
     )
 
 
 if __name__ == "__main__":
-    k = 2
+    k = None
+    random.seed(42)
     # exp_1 = Experiment(exp_num=1)
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
