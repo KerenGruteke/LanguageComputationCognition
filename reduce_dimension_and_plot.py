@@ -19,7 +19,7 @@ def reduce_dimension_and_plot(
     names,
     labels,
     vector_type,
-    k,
+    dim=2,
     plot=True,
     plot_names=True,
 ):
@@ -35,14 +35,14 @@ def reduce_dimension_and_plot(
 
     if method == "TSNE":
         # Create a t-SNE instance
-        reduce_model = TSNE(n_components=k, random_state=42, perplexity=15)
+        reduce_model = TSNE(n_components=dim, random_state=42, perplexity=15)
     elif method == "UMAP":
         reduce_model = umap.UMAP(
-            n_components=k, random_state=42
+            n_components=dim, random_state=42
         )  # Reduce to 2 dimensions
     elif method == "PCA":
         # Create a PCA instance
-        reduce_model = PCA(n_components=2)  # Reduce to 2 principal components
+        reduce_model = PCA(n_components=dim)  # Reduce to 2 principal components
 
     # Fit the data and perform dimensionality reduction
     X_reduced = reduce_model.fit_transform(vectors_matrix)
