@@ -124,29 +124,29 @@ def run_clustering_after_reduction(exp: Experiment, vector_type: str, k: int):
 
 
 if __name__ == "__main__":
-    k = 6
     random.seed(42)
     # exp_1 = Experiment(exp_num=1)
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
-    # run_clustering_before_reduction(
-    #     exp=exp_3,
-    #     vector_type="Glove",
-    #     k=k,
-    # )
-    run_clustering_after_reduction(
-        exp=exp_3,
-        vector_type="Glove",
-        k=k,
-    )
-    # run_clustering_before_reduction(
-    #     exp=exp_3,
-    #     vector_type="BERT",
-    #     k=k,
-    # )
-    # run_clustering_before_reduction(
-    #     exp=exp_3,
-    #     vector_type="fMRI",
-    #     k=k,
-    # )
+    for k in [None, 5, 6]:
+        run_clustering_before_reduction(
+            exp=exp_3,
+            vector_type="Glove",
+            k=k,
+        )
+        run_clustering_after_reduction(
+            exp=exp_3,
+            vector_type="Glove",
+            k=k,
+        )
+        # run_clustering_before_reduction(
+        #     exp=exp_3,
+        #     vector_type="BERT",
+        #     k=k,
+        # )
+        # run_clustering_before_reduction(
+        #     exp=exp_3,
+        #     vector_type="fMRI",
+        #     k=k,
+        # )
