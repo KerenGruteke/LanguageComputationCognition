@@ -62,8 +62,9 @@ class Experiment:
             self.keyPassages = exp_data["keyPassages"]
             self.fmri_data = exp_data["Fmridata"]
 
-            self.categories_names = [arr[0] for arr in self.keyPassageCategory[0]]
             self.glove_vectors = read_matrix(glove_vectors_path, sep=" ")
+            self.categories_names = [arr[0] for arr in self.keyPassageCategory[0]]
+            self.categories_all_vectors = self.vector_to_category()
 
             with open(stimuli_text_path, "r") as file:
                 stimuli_text = file.readlines()
@@ -78,3 +79,13 @@ class Experiment:
         if get_bert_decoding:
             sentences_exp = [sentence.strip() for sentence in stimuli_text]
             self.bert_vectors = extract_sentence_representation(sentences_exp)
+
+    def vector_to_category(self):
+        vec_to_category = []
+        for sent_idx, sent in enumerate(self.glove_vectors):
+            sentence_idx = self.labelsSentences[sent_idx - 1][0]
+            passage_idx = self.labelsPassageForEachSentence[sentence_idx - 1][0]
+            category_idx = self.labelsPassageCategory[passage_idx - 1][0]
+            category_name = self.keyPassageCategory[0][category_idx - 1][0]
+            vec_to_category.append(category_name)
+        return vec_to_category
