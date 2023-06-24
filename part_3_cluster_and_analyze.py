@@ -12,7 +12,7 @@ from reduce_dimension_and_plot import reduce_dimension_and_plot
 def run_all(exp: Experiment, vector_type: str, k: int):
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
-    cluster_nums_of_all_vectors, category_to_cluster = run_kmeans(
+    cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
         exp=exp, vectors=vectors, vector_type=vector_type, k=k
     )
 
