@@ -17,12 +17,6 @@ DIM = 2
 def reduce_dimension_and_plot(
     method: str,
     vectors_matrix,
-    names,
-    labels,
-    vector_type,
-    k: int,
-    plot=True,
-    plot_names=True,
 ):
     """
     :param vectors_matrix: vectors data
@@ -46,35 +40,26 @@ def reduce_dimension_and_plot(
         reduce_model = PCA(n_components=DIM)  # Reduce to 2 principal components
 
     # Fit the data and perform dimensionality reduction
+    print("reducing dimension...")
     X_reduced = reduce_model.fit_transform(vectors_matrix)
 
     if method == "PCA":
         # print explained_variance_ratio_
         print("explained variance ratio:\n")
         print(reduce_model.explained_variance_ratio_)
-
-    if plot:
-        plot_reduced_vectors_with_labels(
-            method=method,
-            vector_type=vector_type,
-            k=k,
-            labels=labels,
-            names=names,
-            X_reduced=X_reduced,
-            plot_names=plot_names,
-        )
+    return X_reduced
 
 
 def plot_reduced_vectors_with_labels(
-    method, vector_type, k, labels, names, X_reduced, plot_names
+    method, vector_type, k, labels, names, X_reduced, plot_names, before_after
 ):
     # Plot the t-SNE results with sample names and color-coded class labels
     fig, ax = plt.subplots()
     colors_list = sns.color_palette("husl", len(set(labels)))
     color_dict = {label: colors_list[i] for i, label in enumerate(set(labels))}
 
-    # colors = [color_dict[label] for label in labels]
-    # scatter = ax.scatter(X_reduced[:, 0], X_reduced[:, 1], c=colors, label=labels)
+    colors = [color_dict[label] for label in labels]
+    scatter = ax.scatter(X_reduced[:, 0], X_reduced[:, 1], c=colors, label=labels)  # noqa: F841
 
     if plot_names:
         for i in range(X_reduced.shape[0]):
@@ -99,9 +84,13 @@ def plot_reduced_vectors_with_labels(
     plt.xlabel(f"{method} Component 1")
     plt.ylabel(f"{method} Component 2")
     plt.title(f"{method} {vector_type} k={k}")
-    plt.savefig(RESULTS_PATH / f"{method} {vector_type} k={k}.jpg")
+    plt.savefig(
+        RESULTS_PATH / f"clustering {before_after} {method} {vector_type} k={k}.jpg"
+    )
     plt.clf()
 
     df = pd.DataFrame(data={"names": names, "labels": labels})
     df_sorted = df.sort_values(by=["labels", "names"])
-    df_sorted.to_csv(RESULTS_PATH / f"{method} {vector_type} k={k}.csv")
+    df_sorted.to_csv(
+        RESULTS_PATH / f"clustering {before_after} {method} {vector_type} k={k}.csv"
+    )

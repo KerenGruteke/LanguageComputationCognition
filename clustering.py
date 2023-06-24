@@ -54,7 +54,14 @@ def best_k_kmeans(vectors, vector_type):
     return best_k_wscc
 
 
-def run_kmeans(exp: Experiment, vectors, vector_type: str, k: int = None):
+def run_kmeans(
+    exp: Experiment, avg_categories: bool, vectors, vector_type: str, k: int = None
+):
+    if avg_categories:
+        categories_names = exp.categories_names
+    else:
+        categories_names = exp.categories_all_vectors
+
     if not k:
         k = best_k_kmeans(vectors=vectors, vector_type=vector_type)
     kmeans = KMeans(n_clusters=k)
@@ -65,7 +72,7 @@ def run_kmeans(exp: Experiment, vectors, vector_type: str, k: int = None):
     cluster_to_categories = {}
     # for each cluster creates dict of {category: count}
     for idx, cluster_num in enumerate(clusters_numbers):
-        category_name = exp.categories_all_vectors[idx]
+        category_name = categories_names[idx]
         if cluster_num not in cluster_to_categories.keys():
             cluster_to_categories[cluster_num] = {}  # new count diict
         if category_name not in cluster_to_categories[cluster_num].keys():
@@ -88,7 +95,7 @@ def run_kmeans(exp: Experiment, vectors, vector_type: str, k: int = None):
         category_to_cluster[category] = chosen_cluster
 
     cluster_nums_of_all_vectors = [
-        category_to_cluster[category] for category in exp.categories_all_vectors
+        category_to_cluster[category] for category in categories_names
     ]
 
     return cluster_nums_of_all_vectors, category_to_cluster, k
