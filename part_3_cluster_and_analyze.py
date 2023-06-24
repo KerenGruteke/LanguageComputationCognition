@@ -26,7 +26,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
         names=exp.categories_all_vectors,
         labels=cluster_nums_of_all_vectors,
         vector_type=vector_type,
-        dim=2,
+        k=k,
         plot=True,
         plot_names=False,
     )
@@ -36,7 +36,7 @@ def run_all(exp: Experiment, vector_type: str, k: int):
         names=exp.categories_names,
         labels=list(category_to_cluster.values()),
         vector_type=f"{vector_type}_avg",
-        dim=2,
+        k=k,
         plot=True,
         plot_names=True,
     )

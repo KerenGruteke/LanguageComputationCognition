@@ -11,6 +11,7 @@ from sklearn.manifold import TSNE
 # from typing import Optional, Union
 
 RESULTS_PATH = Path("results")
+DIM = 2
 
 
 def reduce_dimension_and_plot(
@@ -19,7 +20,7 @@ def reduce_dimension_and_plot(
     names,
     labels,
     vector_type,
-    dim=2,
+    k=k,
     plot=True,
     plot_names=True,
 ):
@@ -35,14 +36,14 @@ def reduce_dimension_and_plot(
 
     if method == "TSNE":
         # Create a t-SNE instance
-        reduce_model = TSNE(n_components=dim, random_state=42, perplexity=15)
+        reduce_model = TSNE(n_components=DIM, random_state=42, perplexity=15)
     elif method == "UMAP":
         reduce_model = umap.UMAP(
-            n_components=dim, random_state=42
+            n_components=DIM, random_state=42
         )  # Reduce to 2 dimensions
     elif method == "PCA":
         # Create a PCA instance
-        reduce_model = PCA(n_components=dim)  # Reduce to 2 principal components
+        reduce_model = PCA(n_components=DIM)  # Reduce to 2 principal components
 
     # Fit the data and perform dimensionality reduction
     X_reduced = reduce_model.fit_transform(vectors_matrix)
