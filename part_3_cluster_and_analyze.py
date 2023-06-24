@@ -16,9 +16,8 @@ def run_all(exp: Experiment, vector_type: str, k: int):
         exp=exp, vectors=vectors, vector_type=vector_type, k=k
     )
 
-    print("hello")
-    method = "PCA"
-    # method = "TSNE"
+    # method = "PCA"
+    method = "TSNE"
     # method = "UMAP"
 
     reduce_dimension_and_plot(
