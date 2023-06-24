@@ -10,7 +10,7 @@ from sklearn.manifold import TSNE
 
 # from typing import Optional, Union
 
-RESULTS_PATH = Path("~").expanduser() / "results"
+RESULTS_PATH = Path("results")
 
 
 def reduce_dimension_and_plot(
@@ -82,7 +82,7 @@ def reduce_dimension_and_plot(
     plt.xlabel(f"{method} Component 1")
     plt.ylabel(f"{method} Component 2")
     plt.title(f"{method} {vector_type} k={k}")
-    plt.savefig(RESULTS_PATH / f"{method} {vector_type} k={k}.csv")
+    plt.savefig(RESULTS_PATH / f"{method} {vector_type} k={k}.jpg")
 
     df = pd.DataFrame(data={"names": names, "labels": labels})
     df_sorted = df.sort_values(by=["labels", "names"])
