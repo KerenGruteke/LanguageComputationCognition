@@ -101,9 +101,12 @@ class Experiment:
 
     def get_avg_vectors_per_category(self, vectors):
         avg_vectors_per_category = {}
+        for category_name in self.categories_names:
+            avg_vectors_per_category[category_name] = 0
+
         for idx, vec in enumerate(vectors):
             name = self.categories_all_vectors[idx]
-            if name not in avg_vectors_per_category.keys():
+            if avg_vectors_per_category[name] == 0:
                 avg_vectors_per_category[name] = [vec, 1]
             else:
                 avg_vectors_per_category[name][0] += vec
