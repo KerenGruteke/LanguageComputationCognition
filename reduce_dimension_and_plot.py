@@ -79,7 +79,8 @@ def plot_reduced_vectors_with_labels(
     ]
 
     # Add legend to the plot
-    ax.legend(handles=legend_handles, loc="lower right", title="Classes")
+    ax.legend(handles=legend_handles, loc="center left", title="Classes", bbox_to_anchor=(1.1, 0.5))
+    plt.subplots_adjust(right=0.75)
 
     plt.xlabel(f"{method} Component 1")
     plt.ylabel(f"{method} Component 2")
