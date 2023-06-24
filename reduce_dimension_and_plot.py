@@ -20,7 +20,7 @@ def reduce_dimension_and_plot(
     names,
     labels,
     vector_type,
-    k=k,
+    k: int,
     plot=True,
     plot_names=True,
 ):
