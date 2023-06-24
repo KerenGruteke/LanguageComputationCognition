@@ -16,9 +16,9 @@ def run_clustering_before_reduction(exp: Experiment, vector_type: str, k: int):
     before_after = "before"
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
-    method = "PCA"
+    # method = "PCA"
     # method = "TSNE"
-    # method = "UMAP"
+    method = "UMAP"
 
     # --- regular ---
     cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
@@ -68,9 +68,9 @@ def run_clustering_after_reduction(exp: Experiment, vector_type: str, k: int):
     before_after = "after"
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
 
-    method = "PCA"
+    # method = "PCA"
     # method = "TSNE"
-    # method = "UMAP"
+    method = "UMAP"
 
     # --- regular ---
     X_reduced = reduce_dimension_and_plot(
@@ -130,8 +130,7 @@ if __name__ == "__main__":
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
-    # None, 2, 5,
-    for k in [6]:
+    for k in [None, 2, 5, 6]:
         run_clustering_before_reduction(
             exp=exp_3,
             vector_type="Glove",

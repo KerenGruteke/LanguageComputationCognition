@@ -7,7 +7,6 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 from get_exp_data import Experiment
-from rank_based_accuracy_functions import cosine_similarity
 
 RESULTS_PATH = Path("results")
 
@@ -67,7 +66,7 @@ def run_kmeans(
     if not k:
         k = best_k_kmeans(vectors=vectors, vector_type=vector_type)
 
-    kmeans = KMeans(n_clusters=k, metric=cosine_similarity)
+    kmeans = KMeans(n_clusters=k)
     norm_vectors = preprocessing.normalize(vectors)
     kmeans.fit(norm_vectors)
     clusters_numbers = kmeans.labels_
