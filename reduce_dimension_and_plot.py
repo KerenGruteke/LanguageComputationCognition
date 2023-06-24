@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import matplotlib.patches as mpatches
 import pandas as pd
 import seaborn as sns
@@ -6,41 +8,45 @@ from matplotlib import pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
+# from typing import Optional, Union
+
+RESULTS_PATH = Path("~").expanduser() / "results"
+
 
 def reduce_dimension_and_plot(
-    dimension_redcution_method,
+    method: str,
     vectors_matrix,
     names,
     labels,
-    embedding_name,
-    K,
+    vector_type,
+    k,
     plot_names=True,
 ):
     """
     :param vectors_matrix: vectors data
     :param names: list that contains for each vector its category name
     :param labels: list that contains for each vector its cluster number
-    :param embedding_name: the embedding name
+    :param vector_type: glove / BERT/ fMRI
     :param K: k clusters
     :param plot_names: flag to indicate whether to plot names or not
     :return:
     """
 
-    if dimension_redcution_method == "TSNE":
+    if method == "TSNE":
         # Create a t-SNE instance
-        reduce_model = TSNE(n_components=K, random_state=42, perplexity=15)
-    elif dimension_redcution_method == "UMAP":
+        reduce_model = TSNE(n_components=k, random_state=42, perplexity=15)
+    elif method == "UMAP":
         reduce_model = umap.UMAP(
-            n_components=K, random_state=42
+            n_components=k, random_state=42
         )  # Reduce to 2 dimensions
-    elif dimension_redcution_method == "PCA":
+    elif method == "PCA":
         # Create a PCA instance
         reduce_model = PCA(n_components=2)  # Reduce to 2 principal components
 
     # Fit the data and perform dimensionality reduction
     X_reduced = reduce_model.fit_transform(vectors_matrix)
 
-    if dimension_redcution_method == "PCA":
+    if method == "PCA":
         # print explained_variance_ratio_
         print("explained variance ratio:\n")
         print(reduce_model.explained_variance_ratio_)
@@ -73,11 +79,11 @@ def reduce_dimension_and_plot(
     # Add legend to the plot
     ax.legend(handles=legend_handles, loc="lower right", title="Classes")
 
-    plt.xlabel(f"{dimension_redcution_method} Component 1")
-    plt.ylabel(f"{dimension_redcution_method} Component 2")
-    plt.title(f"{dimension_redcution_method} {embedding_name} k={K}")
-    plt.show()
+    plt.xlabel(f"{method} Component 1")
+    plt.ylabel(f"{method} Component 2")
+    plt.title(f"{method} {vector_type} k={k}")
+    plt.savefig(RESULTS_PATH / f"{method} {vector_type} k={k}.csv")
 
     df = pd.DataFrame(data={"names": names, "labels": labels})
     df_sorted = df.sort_values(by=["labels", "names"])
-    df_sorted.to_csv(f"{dimension_redcution_method} {embedding_name} k={K}.csv")
+    df_sorted.to_csv(RESULTS_PATH / f"{method} {vector_type} k={k}.csv")

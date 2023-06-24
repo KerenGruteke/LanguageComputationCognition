@@ -74,4 +74,4 @@ class Experiment:
 
         if get_bert_decoding:
             sentences_exp = [sentence.strip() for sentence in stimuli_text]
-            self.sentences_bert_vecs = extract_sentence_representation(sentences_exp)
+            self.bert_vectors = extract_sentence_representation(sentences_exp)

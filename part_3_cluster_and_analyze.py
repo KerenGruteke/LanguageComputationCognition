@@ -1,19 +1,8 @@
 import numpy as np
 
+from clustering import run_kmeans
 from get_exp_data import Experiment
 from reduce_dimension_and_plot import reduce_dimension_and_plot
-
-K = 2
-
-exp_1 = Experiment(exp_num=1)
-exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
-exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
-
-# create a list of all categories for exp
-def exp_categories_names(exp):
-    exp_names = [arr[0] for arr in exp_3.keyPassageCategory[0]]
-    return exp_names
-
 
 # create a list that every entry represents the category of the sentence by order
 
@@ -32,41 +21,62 @@ def vector_to_category(vectors):
 # -----------------------------------------------------------------------------------------------------------------
 
 
-def run_all(vectors, exp_names, K, embedding_name):
+def run_all(vectors, exp_names, k: int, vector_type: str):
     (
-        cat_all_vectors,
+        categories_all_vectors,
         clusters_per_vec,
         avg_vectors_per_category_list,
         category_to_cluster,
-    ) = run_kmeans(vectors, exp_names, K=K)
-    # run_tsne_and_plot(vectors_matrix=vectors, names=cat_all_vectors, labels=clusters_per_vec,
-    #                   embedding_name=embedding_name, K=K, plot_names=False)
-    # run_tsne_and_plot(vectors_matrix=np.array(avg_vectors_per_category_list), names=exp_names,
-    #                   labels=list(category_to_cluster.values()), embedding_name=f'{embedding_name}_avg', K=K)
-    # run_umap_and_plot(vectors_matrix=vectors, names=cat_all_vectors, labels=clusters_per_vec,
-    #                   embedding_name=embedding_name, K=K, plot_names=False)
-    # run_umap_and_plot(vectors_matrix=np.array(avg_vectors_per_category_list), names=exp_names,
-    #                   labels=list(category_to_cluster.values()), embedding_name=f'{embedding_name}_avg', K=K)
-    run_pca_and_plot(
+    ) = run_kmeans(vectors, exp_names, k=k)
+
+    method = "PCA"
+    # method = "TSNE"
+    # method = "UMAP"
+
+    reduce_dimension_and_plot(
+        method=method,
         vectors_metrix=vectors,
-        names=cat_all_vectors,
+        names=categories_all_vectors,
         labels=clusters_per_vec,
-        embedding_name=embedding_name,
-        K=K,
+        vector_type=vector_type,
+        k=k,
         plot_names=False,
     )
-    run_pca_and_plot(
+    reduce_dimension_and_plot(
+        method=method,
         vectors_metrix=np.array(avg_vectors_per_category_list),
         names=exp_names,
         labels=list(category_to_cluster.values()),
-        embedding_name=f"{embedding_name}_avg",
-        K=K,
+        vector_type=f"{vector_type}_avg",
+        k=k,
+        plot_names=True,
     )
 
 
-# running
-exp3_names = exp_categories_names(exp_3)  # 24 names of topics
-categories_all_vectors = vector_to_category(exp_3.vectors)  # vec of 384 categories
-run_all(exp_3.vectors, exp3_names, K, "original_vectors")
-run_all(exp_3.bert_representations, exp3_names, K, "BERT_vectors")
-run_all(exp_3.Fmridata, exp3_names, K, "Fmri_vectors")
+if __name__ == "__main__":
+    k = 2
+    exp_1 = Experiment(exp_num=1)
+    exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
+    exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
+
+    # vec of 384 categories
+    categories_all_vectors = vector_to_category(exp_3.glove_vectors)
+
+    run_all(
+        vectors=exp_3.glove_vectors,
+        exp_names=exp_3.categories_names,
+        k=k,
+        vector_type="Glove",
+    )
+    run_all(
+        vectors=exp_3.bert_vectors,
+        exp_names=exp_3.categories_names,
+        k=k,
+        vector_type="BERT",
+    )
+    run_all(
+        vectors=exp_3.fmri_data,
+        exp_names=exp_3.categories_names,
+        k=k,
+        vector_type="fMRI",
+    )

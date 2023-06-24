@@ -15,15 +15,15 @@ def decode_brain_to_BERT():
     exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
 
     # Calculate the number of rows for the train and test sets
-    train_rows = int(0.7 * exp_2.sentences_bert_vecs.shape[0])
+    train_rows = int(0.7 * exp_2.bert_vectors.shape[0])
 
     # Split into train sets
-    BERT_train_exp2 = exp_2.sentences_bert_vecs[:train_rows, :]
+    BERT_train_exp2 = exp_2.bert_vectors[:train_rows, :]
     Fmridata_train_exp2 = exp_2.fmri_data[:train_rows, :]
     glove_train_exp2 = exp_2.glove_vectors[:train_rows, :]
 
     # Split into test sets
-    BERT_test_exp2 = exp_2.sentences_bert_vecs[train_rows:, :]
+    BERT_test_exp2 = exp_2.bert_vectors[train_rows:, :]
     Fmridata_test_exp2 = exp_2.fmri_data[train_rows:, :]
     glove_test_exp2 = exp_2.glove_vectors[train_rows:, :]
     # --------------------------------------------------------------------------------------------- exp2 train and test
