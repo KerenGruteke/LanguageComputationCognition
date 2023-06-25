@@ -124,23 +124,25 @@ if __name__ == "__main__":
     random.seed(42)
     # exp_1 = Experiment(exp_num=1)
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
-    exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
+    exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
 
-    for method in ["TSNE"]:
-        for k in [8, 10]:
-            run_clustering_before_reduction(
-                exp=exp_3, vector_type="Glove", k=k, method=method
-            )
+    for method in ["TSNE", "UMAP"]:
+        for k in [None, 5, 8, 10]:
+            # run_clustering_before_reduction(
+            #     exp=exp_3, vector_type="Glove", k=k, method=method
+            # )
             # run_clustering_after_reduction(
             #     exp=exp_3, vector_type="Glove", k=k, method=method
             # )
-            # run_clustering_before_reduction(
-            #     exp=exp_3,
-            #     vector_type="BERT",
-            #     k=k,
-            # )
+            run_clustering_before_reduction(
+                exp=exp_3,
+                vector_type="BERT",
+                k=k,
+                method=method
+            )
             # run_clustering_before_reduction(
             #     exp=exp_3,
             #     vector_type="fMRI",
             #     k=k,
+            #     method=method
             # )
