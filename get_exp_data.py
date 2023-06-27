@@ -100,13 +100,13 @@ class Experiment:
             vec_to_category.append(category_name)
         return vec_to_category
 
-    def get_avg_vectors_per_category(self, vectors):
-        vectors = copy.deepcopy(vectors)
+    def get_avg_vectors_per_category(self, input_vectors):
+        new_vectors = copy.deepcopy(input_vectors)
         avg_vectors_per_category = {}
         for category_name in self.categories_names:
             avg_vectors_per_category[category_name] = 0
 
-        for idx, vec in enumerate(vectors):
+        for idx, vec in enumerate(new_vectors):
             name = self.categories_all_vectors[idx]
             if avg_vectors_per_category[name] == 0:
                 avg_vectors_per_category[name] = [vec, 1]

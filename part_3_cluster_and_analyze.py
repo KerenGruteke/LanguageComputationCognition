@@ -2,6 +2,7 @@ import random
 
 import numpy as np
 
+from analyze_cosine_similarity_all_data import plot_rand_sim_values
 from clustering import (
     calculate_between_similarity,
     calculate_within_similatiry,
@@ -178,6 +179,10 @@ def analyze_clusters_distances(
     mean_between, median_between, similarity_list = calculate_between_similarity(
         cluster_to_vecs, cluter_to_names
     )
+    # get mean similarity over all pairs
+    mean_all, median_all = plot_rand_sim_values(
+        vectors=avg_vectors_for_analyzing, vec_type=f"{vector_type_for_clustring}_avg"
+    )
     # plot
     plot_similarity_analysis(
         mean_within,
@@ -185,6 +190,7 @@ def analyze_clusters_distances(
         y_axis_label="mean cosine similarity",
         vector_type_for_clustring=vector_type_for_clustring,
         vector_type_for_analyzing=vector_type_for_analyzing,
+        mean_all=mean_all,
         k=k,
     )
     plot_similarity_analysis(
@@ -193,6 +199,7 @@ def analyze_clusters_distances(
         y_axis_label="median cosine similarity",
         vector_type_for_clustring=vector_type_for_clustring,
         vector_type_for_analyzing=vector_type_for_analyzing,
+        median_all=median_all,
         k=k,
     )
 
@@ -203,18 +210,18 @@ if __name__ == "__main__":
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
-    # explore k meands and reducing dimensions
-    # for method in ["TSNE", "UMAP"]:
+    # # explore k meands and reducing dimensions
+    # for method in ["TSNE"]:
     #     for k in [None, 5, 8, 10]:
-    #         # run_clustering_before_reduction(
-    #         #     exp=exp_3, vector_type="Glove", k=k, method=method
-    #         # )
+    #         run_clustering_before_reduction(
+    #             exp=exp_3, vector_type="Glove", k=k, method=method
+    #         )
     #         # run_clustering_after_reduction(
     #         #     exp=exp_3, vector_type="Glove", k=k, method=method
     #         # )
-    #         run_clustering_before_reduction(
-    #             exp=exp_3, vector_type="BERT", k=k, method=method
-    #         )
+    #         # run_clustering_before_reduction(
+    #         #     exp=exp_3, vector_type="BERT", k=k, method=method
+    #         # )
     #         # run_clustering_before_reduction(
     #         #     exp=exp_3,
     #         #     vector_type="fMRI",
@@ -228,6 +235,13 @@ if __name__ == "__main__":
             exp=exp_3,
             vector_type_for_clustring="Glove",
             vector_type_for_analyzing="Glove",
+            k=k,
+            method="TSNE"
+        )
+        analyze_clusters_distances(
+            exp=exp_3,
+            vector_type_for_clustring="Glove",
+            vector_type_for_analyzing="fMRI",
             k=k,
             method="TSNE"
         )

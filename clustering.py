@@ -217,6 +217,8 @@ def plot_similarity_analysis(
     vector_type_for_clustring: str,
     vector_type_for_analyzing: str,
     k: int,
+    mean_all: float = None,
+    median_all: float = None,
 ):
     x_axis_label = "cluster num"
     title = f"{y_axis_label} within and between clusters of {vector_type_for_analyzing} vectors"
@@ -229,6 +231,11 @@ def plot_similarity_analysis(
     plt.xlabel(x_axis_label)
     plt.ylabel(y_axis_label)
     plt.title(title)
+    if mean_all:
+        plt.axhline(mean_all, color="r", linestyle="--", label="Mean")
+    if median_all:
+        plt.axhline(mean_all, color="r", linestyle="--", label="Median")
+
     plt.savefig(
         RESULTS_PATH
         / f"{title} after clustring by {vector_type_for_clustring} k={k}.jpg"
