@@ -1,5 +1,5 @@
 import random
-
+import matplotlib.pyplot as plt
 import numpy as np
 
 from clustering import (
@@ -140,6 +140,13 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
         category_to_cluster=category_to_cluster, exp=exp
     )
     within_distances = calculate_within_distance(fmri_to_clusters)
+    clusters_list = within_distances.keys()
+    distances = within_distances.values()
+    plt.bar(clusters_list, distances)
+    plt.xlabel('cluster num')
+    plt.ylabel('within_distance')
+    plt.title('within distance for each cluster')
+    plt.show()
     between_distances = calculate_between_distance(fmri_to_clusters)
 
 
