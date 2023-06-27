@@ -6,6 +6,7 @@ from sklearn import preprocessing  # to normalise existing X
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.metrics.pairwise import cosine_similarity
+
 from get_exp_data import Experiment
 
 RESULTS_PATH = Path("results")
@@ -65,15 +66,16 @@ def run_kmeans(
 
     if not k:
         k = best_k_kmeans(vectors=vectors, vector_type=vector_type)
-    kmeans = KMeans(n_clusters=k)
-    kmeans.fit(vectors)
+    kmeans = KMeans(n_clusters=k, metric=cosine_similarity)
+    norm_vectors = preprocessing.normalize(vectors)
+    kmeans.fit(norm_vectors)
     clusters_numbers = kmeans.labels_
     # centroids = kmeans.cluster_centers_
 
     cluster_to_categories = {}
     # for each cluster creates dict of {category: count}
     for idx, cluster_num in enumerate(clusters_numbers):
-        category_name = exp.categories_all_vectors[idx]
+        category_name = categories_names[idx]
         if cluster_num not in cluster_to_categories.keys():
             cluster_to_categories[cluster_num] = {}  # new count diict
         if category_name not in cluster_to_categories[cluster_num].keys():
@@ -101,6 +103,7 @@ def run_kmeans(
 
     return cluster_nums_of_all_vectors, category_to_cluster
 
+
 def calculate_within_distance(cluster_dict):
     within_distances = {}
 
@@ -114,7 +117,7 @@ def calculate_within_distance(cluster_dict):
         # Calculate the pairwise distances between vectors in the cluster using cosine similarity
         distances = np.zeros((cluster_size, cluster_size))
         for i in range(cluster_size):
-            for j in range(i+1, cluster_size):
+            for j in range(i + 1, cluster_size):
                 similarity = cosine_similarity([vectors[i]], [vectors[j]])
                 distances[i, j] = 1 - similarity[0, 0]
 
@@ -124,6 +127,7 @@ def calculate_within_distance(cluster_dict):
         within_distances[cluster_num] = within_distance
 
     return within_distances
+
 
 def calculate_between_distance(cluster_dict):
 
@@ -138,7 +142,7 @@ def calculate_between_distance(cluster_dict):
     num_clusters = len(cluster_nums)
     distances = np.zeros((num_clusters, num_clusters))
     for i in range(num_clusters):
-        for j in range(i+1, num_clusters):
+        for j in range(i + 1, num_clusters):
             centroid_i = centroids[cluster_nums[i]]
             centroid_j = centroids[cluster_nums[j]]
             distances[i, j] = np.linalg.norm(centroid_i - centroid_j)
@@ -148,7 +152,8 @@ def calculate_between_distance(cluster_dict):
 
     return between_distance
 
-def create_fmri_to_cluster(category_to_cluster, exp:Experiment):
+
+def create_fmri_to_cluster(category_to_cluster, exp: Experiment):
     fmri_cluster_num_list = []
     for i, cat in enumerate(exp.categories_all_vectors):
         fmri_cluster_num_list.append(category_to_cluster[cat])
