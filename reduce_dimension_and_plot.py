@@ -59,7 +59,9 @@ def plot_reduced_vectors_with_labels(
     color_dict = {label: colors_list[i] for i, label in enumerate(set(labels))}
 
     colors = [color_dict[label] for label in labels]
-    scatter = ax.scatter(X_reduced[:, 0], X_reduced[:, 1], c=colors, label=labels)  # noqa: F841
+    scatter = ax.scatter(
+        X_reduced[:, 0], X_reduced[:, 1], c=colors, label=labels
+    )  # noqa
 
     if plot_names:
         for i in range(X_reduced.shape[0]):
@@ -79,7 +81,12 @@ def plot_reduced_vectors_with_labels(
     ]
 
     # Add legend to the plot
-    ax.legend(handles=legend_handles, loc="center left", title="Classes", bbox_to_anchor=(1.1, 0.5))
+    ax.legend(
+        handles=legend_handles,
+        loc="center left",
+        title="Classes",
+        bbox_to_anchor=(1.1, 0.5),
+    )
     plt.subplots_adjust(right=0.75)
 
     plt.xlabel(f"{method} Component 1")
@@ -89,6 +96,7 @@ def plot_reduced_vectors_with_labels(
         RESULTS_PATH / f"clustering {before_after} {method} {vector_type} k={k}.jpg"
     )
     plt.clf()
+    plt.cla()
 
     df = pd.DataFrame(data={"names": names, "labels": labels})
     df_sorted = df.sort_values(by=["labels", "names"])

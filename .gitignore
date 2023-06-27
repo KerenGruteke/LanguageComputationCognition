@@ -57,3 +57,4 @@ results/TSNE Glove_avg k=6.csv
 results/TSNE Glove_avg k=6.jpg
 results/TSNE Glove_avg k=12.csv
 results/TSNE Glove_avg k=12.jpg
+__pycache__/analyze_cosine_similarity_all_data.cpython-38.pyc

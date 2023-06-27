@@ -227,17 +227,32 @@ def plot_similarity_analysis(
     clusters_list = list(within_distances.keys())
     clusters_list.append("between")
     clusters_list_str = [str(i) for i in clusters_list]
-    plt.bar(clusters_list_str, distances)
+
+    colors = ["#219DE8"] * (len(clusters_list_str) - 1) + ["#ED541F"]
+    plt.bar(clusters_list_str, distances, color=colors)
+    if min(distances) > 0.5:
+        plt.ylim(0.5, plt.ylim()[1])
+    if mean_all:
+        plt.axhline(mean_all, color="r", linestyle="--", label="Mean")
+        plt.text(
+            0.5, mean_all, f"Mean: {mean_all:.2f}", color="r", ha="center", va="bottom"
+        )
+    if median_all:
+        plt.axhline(median_all, color="r", linestyle="--", label="Median")
+        plt.text(
+            0.5,
+            median_all,
+            f"Median: {median_all:.2f}",
+            color="r",
+            ha="center",
+            va="bottom",
+        )
+
     plt.xlabel(x_axis_label)
     plt.ylabel(y_axis_label)
     plt.title(title)
-    if mean_all:
-        plt.axhline(mean_all, color="r", linestyle="--", label="Mean")
-    if median_all:
-        plt.axhline(mean_all, color="r", linestyle="--", label="Median")
-
     plt.savefig(
         RESULTS_PATH
-        / f"{title} after clustring by {vector_type_for_clustring} k={k}.jpg"
+        / f"{y_axis_label} {vector_type_for_analyzing}. clustring by {vector_type_for_clustring} k={k}.jpg"
     )
     plt.clf()

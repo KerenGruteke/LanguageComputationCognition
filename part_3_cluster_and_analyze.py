@@ -181,7 +181,7 @@ def analyze_clusters_distances(
     )
     # get mean similarity over all pairs
     mean_all, median_all = plot_rand_sim_values(
-        vectors=avg_vectors_for_analyzing, vec_type=f"{vector_type_for_clustring}_avg"
+        vectors=avg_vectors_for_analyzing, vec_type=f"{vector_type_for_analyzing}_avg"
     )
     # plot
     plot_similarity_analysis(
@@ -203,6 +203,8 @@ def analyze_clusters_distances(
         k=k,
     )
 
+def analyze_clusters_similarity():
+    pass
 
 if __name__ == "__main__":
     random.seed(42)
