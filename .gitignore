@@ -1,0 +1,14 @@
+DATA/EXP2.pkl
+DATA/EXP3.pkl
+DATA/stimuli_243sentences.txt
+DATA/stimuli_384sentences.txt
+DATA/vectors_243sentences.GV42B300.average.txt
+DATA/vectors_384sentences.GV42B300.average.txt
+__pycache__/BERT_functions.cpython-37.pyc
+__pycache__/BERT_functions.cpython-38.pyc
+__pycache__/BERT_functions.cpython-310.pyc
+__pycache__/BERT_functions.cpython-311.pyc
+__pycache__/get_exp_data.cpython-37.pyc
+__pycache__/learn_decoder.cpython-37.pyc
+Project_2.ipynb
+Project_2.ipynb
