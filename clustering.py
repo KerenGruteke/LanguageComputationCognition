@@ -145,7 +145,8 @@ def calculate_between_distance(cluster_dict):
         for j in range(i + 1, num_clusters):
             centroid_i = centroids[cluster_nums[i]]
             centroid_j = centroids[cluster_nums[j]]
-            distances[i, j] = np.linalg.norm(centroid_i - centroid_j)
+            similarity = cosine_similarity(centroid_i - centroid_j)
+            distances[i, j] = 1 - similarity[0, 0]
 
     # Calculate the average pairwise distance between centroids
     between_distance = np.sum(distances) / (num_clusters * (num_clusters - 1))
