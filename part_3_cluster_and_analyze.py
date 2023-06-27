@@ -2,18 +2,12 @@ import random
 
 import numpy as np
 
-from clustering import (
-    calculate_between_similarity,
-    calculate_within_similatiry,
-    create_fmri_to_cluster,
-    plot_similarity_analysis,
-    run_kmeans,
-)
+from clustering import (calculate_between_similarity,
+                        calculate_within_similatiry, create_fmri_to_cluster,
+                        plot_similarity_analysis, run_kmeans)
 from get_exp_data import Experiment
-from reduce_dimension_and_plot import (
-    plot_reduced_vectors_with_labels,
-    reduce_dimension_and_plot,
-)
+from reduce_dimension_and_plot import (plot_reduced_vectors_with_labels,
+                                       reduce_dimension_and_plot)
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -126,40 +120,53 @@ def run_clustering_after_reduction(
     )
 
 
-def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
-    vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
+def analyze_clusters_distances(
+    exp: Experiment,
+    vector_type_for_clustring: str,
+    vector_type_for_analyzing: str,
+    k: int,
+):
+    # clustering
+    _, avg_vectors_for_clustering = exp.get_vectors_by_type(
+        vector_type=vector_type_for_clustring
+    )
     # --- avg ---
-    vector_type = f"{vector_type}_avg"
-    cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
+    _, category_to_cluster, k = run_kmeans(
         exp=exp,
         avg_categories=True,
-        vectors=avg_vectors_per_category,
-        vector_type=vector_type,
+        vectors=avg_vectors_for_clustering,
+        vector_type=f"{vector_type_for_clustring}_avg",
         k=k,
     )
-    fmri_to_clusters = create_fmri_to_cluster(
+    # analyzing
+    _, avg_vectors_for_analyzing = exp.get_vectors_by_type(
+        vector_type=vector_type_for_analyzing
+    )
+    vec_to_clusters = create_fmri_to_cluster(
         category_to_cluster=category_to_cluster, exp=exp, k=k
     )
     # calc similarity
     mean_within, median_within, similarity_values = calculate_within_similatiry(
-        fmri_to_clusters
+        vec_to_clusters
     )
     mean_between, median_between, similarity_list = calculate_between_similarity(
-        fmri_to_clusters
+        vec_to_clusters
     )
     # plot
     plot_similarity_analysis(
         mean_within,
         mean_between,
         y_axis_label="mean cosine similarity",
-        vector_type=vector_type,
+        vector_type_for_clustring=vector_type_for_clustring,
+        vector_type_for_analyzing=vector_type_for_analyzing,
         k=k,
     )
     plot_similarity_analysis(
         median_within,
         median_between,
         y_axis_label="median cosine similarity",
-        vector_type=vector_type,
+        vector_type_for_clustring=vector_type_for_clustring,
+        vector_type_for_analyzing=vector_type_for_analyzing,
         k=k,
     )
 
@@ -190,5 +197,10 @@ if __name__ == "__main__":
     #         # )
 
     # analyze_clusters_distances
-    analyze_clusters_distances(exp=exp_3, vector_type="Glove", k=5)
-    analyze_clusters_distances(exp=exp_3, vector_type="Glove", k=10)
+    for k in [5, 10]:
+        analyze_clusters_distances(
+            exp=exp_3,
+            vector_type_for_clustring="Glove",
+            vector_type_for_analyzing="Glove",
+            k=k,
+        )

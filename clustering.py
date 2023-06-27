@@ -199,10 +199,15 @@ def create_fmri_to_cluster(category_to_cluster, exp: Experiment, k: int):
 
 
 def plot_similarity_analysis(
-    within_distances, between_distance, y_axis_label, vector_type, k
+    within_distances: dict,
+    between_distance: float,
+    y_axis_label: str,
+    vector_type_for_clustring: str,
+    vector_type_for_analyzing: str,
+    k: int,
 ):
     x_axis_label = "cluster num"
-    title = f"{y_axis_label} within and between clusters of fMRI data"
+    title = f"{y_axis_label} within and between clusters of {vector_type_for_analyzing} vectors"
     distances = list(within_distances.values())
     distances.append(between_distance)
     clusters_list = list(within_distances.keys())
@@ -212,5 +217,8 @@ def plot_similarity_analysis(
     plt.xlabel(x_axis_label)
     plt.ylabel(y_axis_label)
     plt.title(title)
-    plt.savefig(RESULTS_PATH / f"{title} after clustring by {vector_type} k={k}.jpg")
+    plt.savefig(
+        RESULTS_PATH
+        / f"{title} after clustring by {vector_type_for_clustring} k={k}.jpg"
+    )
     plt.clf()
