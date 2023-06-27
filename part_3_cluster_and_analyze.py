@@ -1,11 +1,8 @@
 import random
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 from clustering import (
-    RESULTS_PATH,
-    calculate_between_centorids_similarity,
     calculate_between_similarity,
     calculate_within_similatiry,
     create_fmri_to_cluster,
@@ -141,7 +138,7 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
         k=k,
     )
     fmri_to_clusters = create_fmri_to_cluster(
-        category_to_cluster=category_to_cluster, exp=exp
+        category_to_cluster=category_to_cluster, exp=exp, k=k
     )
     # calc similarity
     mean_within, median_within, similarity_values = calculate_within_similatiry(
@@ -194,3 +191,4 @@ if __name__ == "__main__":
 
     # analyze_clusters_distances
     analyze_clusters_distances(exp=exp_3, vector_type="Glove", k=5)
+    analyze_clusters_distances(exp=exp_3, vector_type="Glove", k=10)

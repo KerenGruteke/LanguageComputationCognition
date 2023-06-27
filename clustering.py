@@ -141,6 +141,7 @@ def calculate_between_similarity(cluster_dict):
     num_clusters = len(cluster_nums)
     similarity_list = []
     for i in range(num_clusters):
+        print(f"until cluster {i}: mean_between={np.mean(similarity_list)}")
         for j in range(i + 1, num_clusters):
             cluster_i = cluster_dict[i]
             cluster_j = cluster_dict[j]
@@ -183,22 +184,23 @@ def calculate_between_centorids_similarity(cluster_dict):
     return mean_between, median_between, similarity_list
 
 
-def create_fmri_to_cluster(category_to_cluster, exp: Experiment):
+def create_fmri_to_cluster(category_to_cluster, exp: Experiment, k: int):
+    fmri_dict = {}
+    for cluster_num in range(k):
+        fmri_dict[cluster_num] = []
+
     fmri_cluster_num_list = []
     for i, cat in enumerate(exp.categories_all_vectors):
         fmri_cluster_num_list.append(category_to_cluster[cat])
-    fmri_dict = {}
     for cluster, vec in zip(fmri_cluster_num_list, exp.fmri_data):
-        if cluster not in fmri_dict.keys():
-            fmri_dict[cluster] = []
-            fmri_dict[cluster].append(vec)
-        else:
-            fmri_dict[cluster].append(vec)
+        fmri_dict[cluster].append(vec)
 
     return fmri_dict
 
 
-def plot_similarity_analysis(within_distances, between_distance, y_axis_label, vector_type, k):
+def plot_similarity_analysis(
+    within_distances, between_distance, y_axis_label, vector_type, k
+):
     x_axis_label = "cluster num"
     title = f"{y_axis_label} within and between clusters of fMRI data"
     distances = list(within_distances.values())
