@@ -1,8 +1,10 @@
 import random
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 from clustering import (
+    RESULTS_PATH,
     calculate_between_distance,
     calculate_within_distance,
     create_fmri_to_cluster,
@@ -143,10 +145,12 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
     clusters_list = within_distances.keys()
     distances = within_distances.values()
     plt.bar(clusters_list, distances)
-    plt.xlabel('cluster num')
-    plt.ylabel('within_distance')
-    plt.title('within distance for each cluster')
-    plt.show()
+    plt.xlabel("cluster num")
+    plt.ylabel("within_distance")
+    plt.title("within distance for each cluster")
+    plt.savefig(RESULTS_PATH / f"distances after clustring by {vector_type} k={k}.jpg")
+    plt.clf()
+
     between_distances = calculate_between_distance(fmri_to_clusters)
 
 
@@ -176,4 +180,4 @@ if __name__ == "__main__":
     #         # )
 
     # analyze_clusters_distances
-    analyze_clusters_distances(exp=exp3, vector_type="Glove", k=5)
+    analyze_clusters_distances(exp=exp_3, vector_type="Glove", k=5)
