@@ -66,10 +66,10 @@ class Experiment:
             self.categories_names = [arr[0] for arr in self.keyPassageCategory[0]]
             self.categories_all_vectors = self.vector_to_category()
             self.avg_glove_vectors_by_category = self.get_avg_vectors_per_category(
-                self.glove_vectors
+                self.glove_vectors.copy()
             )
             self.avg_fmri_vectors_by_category = self.get_avg_vectors_per_category(
-                self.fmri_data
+                self.fmri_data.copy()
             )
 
             with open(stimuli_text_path, "r") as file:
@@ -86,7 +86,7 @@ class Experiment:
             sentences_exp = [sentence.strip() for sentence in stimuli_text]
             self.bert_vectors = extract_sentence_representation(sentences_exp)
             self.avg_bert_vectors_by_category = self.get_avg_vectors_per_category(
-                self.bert_vectors
+                self.bert_vectors.clone().detach()
             )
 
     def vector_to_category(self):
@@ -101,9 +101,12 @@ class Experiment:
 
     def get_avg_vectors_per_category(self, vectors):
         avg_vectors_per_category = {}
+        for category_name in self.categories_names:
+            avg_vectors_per_category[category_name] = 0
+
         for idx, vec in enumerate(vectors):
             name = self.categories_all_vectors[idx]
-            if name not in avg_vectors_per_category.keys():
+            if avg_vectors_per_category[name] == 0:
                 avg_vectors_per_category[name] = [vec, 1]
             else:
                 avg_vectors_per_category[name][0] += vec

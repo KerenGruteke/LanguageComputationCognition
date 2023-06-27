@@ -12,3 +12,48 @@ __pycache__/get_exp_data.cpython-37.pyc
 __pycache__/learn_decoder.cpython-37.pyc
 Project_2.ipynb
 Project_2.ipynb
+__pycache__/BERT_functions.cpython-310.pyc
+__pycache__/get_exp_data.cpython-310.pyc
+__pycache__/clustering.cpython-310.pyc
+__pycache__/learn_decoder.cpython-310.pyc
+__pycache__/main.cpython-310.pyc
+__pycache__/part_1_decode_brain_to_glove.cpython-310.pyc
+__pycache__/part_2_decode_brain_to_BERT.cpython-310.pyc
+__pycache__/part_2_encode_brain_linear_reg.cpython-310.pyc
+__pycache__/rank_based_accuracy_functions.cpython-310.pyc
+__pycache__/BERT_functions.cpython-38.pyc
+__pycache__/clustering.cpython-38.pyc
+__pycache__/get_exp_data.cpython-38.pyc
+__pycache__/learn_decoder.cpython-38.pyc
+__pycache__/rank_based_accuracy_functions.cpython-38.pyc
+__pycache__/reduce_dimension_and_plot.cpython-38.pyc
+data/EXP2.pkl
+data/EXP3.pkl
+data/imaging_data.csv
+data/modified_file.csv
+data/neuralData_for_EXP1.csv
+data/stimuli_180concepts.txt
+data/stimuli_243sentences.txt
+data/stimuli_384sentences.txt
+data/vectors_180concepts.GV42B300.txt
+data/vectors_243sentences.GV42B300.average.txt
+data/vectors_384sentences.GV42B300.average.txt
+results/Glove Elbow Method best_k=11.jpg
+results/Glove Silhouette Method best_k=2.jpg
+results/Glove Elbow Method best_k=12.jpg
+results/clustering after TSNE Glove k=6.csv
+results/clustering after TSNE Glove k=6.jpg
+results/clustering after TSNE Glove_avg k=6.csv
+results/clustering after TSNE Glove_avg k=6.jpg
+results/TSNE Glove k=5.csv
+results/TSNE Glove k=5.jpg
+results/TSNE Glove k=6.csv
+results/TSNE Glove k=6.jpg
+results/TSNE Glove k=12.csv
+results/TSNE Glove k=12.jpg
+results/TSNE Glove_avg k=5.csv
+results/TSNE Glove_avg k=5.jpg
+results/TSNE Glove_avg k=6.csv
+results/TSNE Glove_avg k=6.jpg
+results/TSNE Glove_avg k=12.csv
+results/TSNE Glove_avg k=12.jpg
