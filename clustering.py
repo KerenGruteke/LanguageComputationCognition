@@ -184,18 +184,18 @@ def calculate_between_centorids_similarity(cluster_dict):
     return mean_between, median_between, similarity_list
 
 
-def create_fmri_to_cluster(category_to_cluster, exp: Experiment, k: int):
-    fmri_dict = {}
+def create_vec_to_cluster(category_to_cluster, vectors, exp: Experiment, k: int):
+    vec_dict = {}
     for cluster_num in range(k):
-        fmri_dict[cluster_num] = []
+        vec_dict[cluster_num] = []
 
-    fmri_cluster_num_list = []
-    for i, cat in enumerate(exp.categories_all_vectors):
-        fmri_cluster_num_list.append(category_to_cluster[cat])
-    for cluster, vec in zip(fmri_cluster_num_list, exp.fmri_data):
-        fmri_dict[cluster].append(vec)
+    vec_cluster_num_list = []
+    for cat in exp.categories_all_vectors:
+        vec_cluster_num_list.append(category_to_cluster[cat])
+    for cluster, vec in zip(vec_cluster_num_list, vectors):
+        vec_dict[cluster].append(vec)
 
-    return fmri_dict
+    return vec_dict
 
 
 def plot_similarity_analysis(

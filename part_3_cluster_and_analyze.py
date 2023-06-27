@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 from clustering import (calculate_between_similarity,
-                        calculate_within_similatiry, create_fmri_to_cluster,
+                        calculate_within_similatiry, create_vec_to_cluster,
                         plot_similarity_analysis, run_kmeans)
 from get_exp_data import Experiment
 from reduce_dimension_and_plot import (plot_reduced_vectors_with_labels,
@@ -142,8 +142,8 @@ def analyze_clusters_distances(
     _, avg_vectors_for_analyzing = exp.get_vectors_by_type(
         vector_type=vector_type_for_analyzing
     )
-    vec_to_clusters = create_fmri_to_cluster(
-        category_to_cluster=category_to_cluster, exp=exp, k=k
+    vec_to_clusters = create_vec_to_cluster(
+        category_to_cluster=category_to_cluster, vectors=avg_vectors_for_analyzing, exp=exp, k=k
     )
     # calc similarity
     mean_within, median_within, similarity_values = calculate_within_similatiry(
