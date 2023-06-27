@@ -159,7 +159,7 @@ if __name__ == "__main__":
     random.seed(42)
     # exp_1 = Experiment(exp_num=1)
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
-    exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
+    exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
     # explore k meands and reducing dimensions
     # for method in ["TSNE", "UMAP"]:
