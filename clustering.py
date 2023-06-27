@@ -101,7 +101,7 @@ def run_kmeans(
         category_to_cluster[category] for category in exp.categories_all_vectors
     ]
 
-    return cluster_nums_of_all_vectors, category_to_cluster
+    return cluster_nums_of_all_vectors, category_to_cluster, k
 
 
 def calculate_within_distance(cluster_dict):
