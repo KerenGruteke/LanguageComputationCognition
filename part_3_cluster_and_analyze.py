@@ -143,15 +143,16 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
     )
     within_distances = calculate_within_distance(fmri_to_clusters)
     clusters_list = within_distances.keys()
+    clusters_list.append("between")
     distances = within_distances.values()
+    between_distance = calculate_between_distance(fmri_to_clusters)
+    distances.append(between_distance)
     plt.bar(clusters_list, distances)
     plt.xlabel("cluster num")
-    plt.ylabel("within_distance")
+    plt.ylabel("distances")
     plt.title("within distance for each cluster")
     plt.savefig(RESULTS_PATH / f"distances after clustring by {vector_type} k={k}.jpg")
     plt.clf()
-
-    between_distances = calculate_between_distance(fmri_to_clusters)
 
 
 if __name__ == "__main__":
