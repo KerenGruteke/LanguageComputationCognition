@@ -1,8 +1,14 @@
 import random
 
 import numpy as np
+
+from clustering import (
+    calculate_between_distance,
+    calculate_within_distance,
+    create_fmri_to_cluster,
+    run_kmeans,
+)
 from get_exp_data import Experiment
-from clustering import run_kmeans, create_fmri_to_cluster, calculate_within_distance, calculate_between_distance
 from reduce_dimension_and_plot import (
     plot_reduced_vectors_with_labels,
     reduce_dimension_and_plot,
@@ -118,9 +124,10 @@ def run_clustering_after_reduction(
         before_after=before_after,
     )
 
-def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int, method: str):
+
+def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
     vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
-      # --- avg ---
+    # --- avg ---
     vector_type = f"{vector_type}_avg"
     cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
         exp=exp,
@@ -129,10 +136,11 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int, method
         vector_type=vector_type,
         k=k,
     )
-    fmri_to_clusters = create_fmri_to_cluster(category_to_cluster=category_to_cluster, exp=exp)
+    fmri_to_clusters = create_fmri_to_cluster(
+        category_to_cluster=category_to_cluster, exp=exp
+    )
     within_distances = calculate_within_distance(fmri_to_clusters)
     between_distances = calculate_between_distance(fmri_to_clusters)
-
 
 
 if __name__ == "__main__":
@@ -141,23 +149,24 @@ if __name__ == "__main__":
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
     exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
 
-    for method in ["TSNE", "UMAP"]:
-        for k in [None, 5, 8, 10]:
-            # run_clustering_before_reduction(
-            #     exp=exp_3, vector_type="Glove", k=k, method=method
-            # )
-            # run_clustering_after_reduction(
-            #     exp=exp_3, vector_type="Glove", k=k, method=method
-            # )
-            run_clustering_before_reduction(
-                exp=exp_3,
-                vector_type="BERT",
-                k=k,
-                method=method
-            )
-            # run_clustering_before_reduction(
-            #     exp=exp_3,
-            #     vector_type="fMRI",
-            #     k=k,
-            #     method=method
-            # )
+    # explore k meands and reducing dimensions
+    # for method in ["TSNE", "UMAP"]:
+    #     for k in [None, 5, 8, 10]:
+    #         # run_clustering_before_reduction(
+    #         #     exp=exp_3, vector_type="Glove", k=k, method=method
+    #         # )
+    #         # run_clustering_after_reduction(
+    #         #     exp=exp_3, vector_type="Glove", k=k, method=method
+    #         # )
+    #         run_clustering_before_reduction(
+    #             exp=exp_3, vector_type="BERT", k=k, method=method
+    #         )
+    #         # run_clustering_before_reduction(
+    #         #     exp=exp_3,
+    #         #     vector_type="fMRI",
+    #         #     k=k,
+    #         #     method=method
+    #         # )
+
+    # analyze_clusters_distances
+    analyze_clusters_distances(exp=exp3, vector_type="Glove", k=5)
