@@ -1,9 +1,8 @@
 import random
 
 import numpy as np
-
-from clustering import run_kmeans
 from get_exp_data import Experiment
+from clustering import run_kmeans, create_fmri_to_cluster, calculate_within_distance, calculate_between_distance
 from reduce_dimension_and_plot import (
     plot_reduced_vectors_with_labels,
     reduce_dimension_and_plot,
@@ -118,6 +117,22 @@ def run_clustering_after_reduction(
         plot_names=True,
         before_after=before_after,
     )
+
+def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int, method: str):
+    vectors, avg_vectors_per_category = exp.get_vectors_by_type(vector_type=vector_type)
+      # --- avg ---
+    vector_type = f"{vector_type}_avg"
+    cluster_nums_of_all_vectors, category_to_cluster, k = run_kmeans(
+        exp=exp,
+        avg_categories=True,
+        vectors=avg_vectors_per_category,
+        vector_type=vector_type,
+        k=k,
+    )
+    fmri_to_clusters = create_fmri_to_cluster(category_to_cluster=category_to_cluster, exp=exp)
+    within_distances = calculate_within_distance(fmri_to_clusters)
+    between_distances = calculate_between_distance(fmri_to_clusters)
+
 
 
 if __name__ == "__main__":
