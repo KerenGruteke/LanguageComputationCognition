@@ -5,9 +5,9 @@ import numpy as np
 from sklearn import preprocessing  # to normalise existing X
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sklearn.metrics.pairwise import cosine_similarity
 
 from get_exp_data import Experiment
+from rank_based_accuracy_functions import cosine_similarity
 
 RESULTS_PATH = Path("results")
 
@@ -104,32 +104,60 @@ def run_kmeans(
     return cluster_nums_of_all_vectors, category_to_cluster, k
 
 
-def calculate_within_distance(cluster_dict):
-    within_distances = {}
+def calculate_within_similatiry(cluster_dict):
+    mean_within = {}
+    median_within = {}
+    similarity_values = {}
 
     # Iterate over each cluster in the dictionary
     for cluster_num, vectors in cluster_dict.items():
         cluster_size = len(vectors)
         if cluster_size <= 1:
-            within_distances[cluster_num] = 0.0
+            mean_within[cluster_num] = 1
+            median_within[cluster_num] = 1
             continue
 
         # Calculate the pairwise distances between vectors in the cluster using cosine similarity
-        distances = np.zeros((cluster_size, cluster_size))
+        similarity_list = []
         for i in range(cluster_size):
             for j in range(i + 1, cluster_size):
-                similarity = cosine_similarity([vectors[i]], [vectors[j]])
-                distances[i, j] = 1 - similarity[0, 0]
+                similarity = cosine_similarity(vectors[i], vectors[j])
+                similarity_list.append(similarity)
 
         # Calculate the sum of pairwise distances
-        within_distance = np.sum(distances) / (cluster_size * (cluster_size - 1))
+        mean_within_dist = np.mean(similarity_list)
+        median_within_dist = np.median(similarity_list)
+        print(mean_within_dist, median_within_dist)
 
-        within_distances[cluster_num] = within_distance
+        mean_within[cluster_num] = mean_within_dist
+        median_within[cluster_num] = median_within_dist
+        similarity_values[cluster_num] = similarity_list
+    return mean_within, median_within, similarity_values
 
-    return within_distances
+
+def calculate_between_similarity(cluster_dict):
+    # Compute the pairwise distances between centroids
+    cluster_nums = list(cluster_dict.keys())
+    num_clusters = len(cluster_nums)
+    similarity_list = []
+    for i in range(num_clusters):
+        for j in range(i + 1, num_clusters):
+            cluster_i = cluster_dict[i]
+            cluster_j = cluster_dict[j]
+            for vec_i in cluster_i:
+                for vec_j in cluster_j:
+                    # Calculate the pairwise distances between vectors in the cluster using cosine similarity
+                    similarity = cosine_similarity(vec_i, vec_j)
+                    similarity_list.append(similarity)
+
+    # Calculate the average pairwise distance between centroids
+    mean_between = np.mean(similarity_list)
+    median_between = np.mean(similarity_list)
+    print(mean_between, median_between)
+    return mean_between, median_between, similarity_list
 
 
-def calculate_between_distance(cluster_dict):
+def calculate_between_centorids_similarity(cluster_dict):
 
     # Calculate the centroid for each cluster
     centroids = {}
@@ -140,18 +168,19 @@ def calculate_between_distance(cluster_dict):
     # Compute the pairwise distances between centroids
     cluster_nums = list(cluster_dict.keys())
     num_clusters = len(cluster_nums)
-    distances = np.zeros((num_clusters, num_clusters))
+    similarity_list = []
     for i in range(num_clusters):
         for j in range(i + 1, num_clusters):
             centroid_i = centroids[cluster_nums[i]]
             centroid_j = centroids[cluster_nums[j]]
-            similarity = cosine_similarity(centroid_i - centroid_j)
-            distances[i, j] = 1 - similarity[0, 0]
+            similarity = cosine_similarity(centroid_i, centroid_j)
+            similarity_list.append(similarity)
 
     # Calculate the average pairwise distance between centroids
-    between_distance = np.sum(distances) / (num_clusters * (num_clusters - 1))
-
-    return between_distance
+    mean_between = np.mean(similarity_list)
+    median_between = np.mean(similarity_list)
+    print(mean_between, median_between)
+    return mean_between, median_between, similarity_list
 
 
 def create_fmri_to_cluster(category_to_cluster, exp: Experiment):
@@ -167,3 +196,19 @@ def create_fmri_to_cluster(category_to_cluster, exp: Experiment):
             fmri_dict[cluster].append(vec)
 
     return fmri_dict
+
+
+def plot_similarity_analysis(within_distances, between_distance, y_axis_label, title):
+    x_axis_label = "cluster num"
+    title = f"{y_axis_label} by {x_axis_label}"
+    distances = list(within_distances.values())
+    distances.append(between_distance)
+    clusters_list = list(within_distances.keys())
+    clusters_list.append("between")
+    clusters_list_str = [str(i) for i in clusters_list]
+    plt.bar(clusters_list_str, distances)
+    plt.xlabel(x_axis_label)
+    plt.ylabel(y_axis_label)
+    plt.title(title)
+    plt.savefig(RESULTS_PATH / f"{title} after clustring by {vector_type} k={k}.jpg")
+    plt.clf()

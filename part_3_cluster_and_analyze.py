@@ -5,9 +5,11 @@ import numpy as np
 
 from clustering import (
     RESULTS_PATH,
-    calculate_between_distance,
-    calculate_within_distance,
+    calculate_between_centorids_similarity,
+    calculate_between_similarity,
+    calculate_within_similatiry,
     create_fmri_to_cluster,
+    plot_similarity_analysis,
     run_kmeans,
 )
 from get_exp_data import Experiment
@@ -141,19 +143,20 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
     fmri_to_clusters = create_fmri_to_cluster(
         category_to_cluster=category_to_cluster, exp=exp
     )
-    within_distances = calculate_within_distance(fmri_to_clusters)
-    clusters_list = list(within_distances.keys())
-    clusters_list.append("between")
-    distances = list(within_distances.values())
-    between_distance = calculate_between_distance(fmri_to_clusters)
-    distances.append(between_distance)
-    clusters_list_str = [str(i) for i in clusters_list]
-    plt.bar(clusters_list_str, distances)
-    plt.xlabel("cluster num")
-    plt.ylabel("distances")
-    plt.title("within distance for each cluster")
-    plt.savefig(RESULTS_PATH / f"distances after clustring by {vector_type} k={k}.jpg")
-    plt.clf()
+    # calc similarity
+    mean_within, median_within, similarity_values = calculate_within_similatiry(
+        fmri_to_clusters
+    )
+    mean_between, median_between, similarity_list = calculate_between_similarity(
+        fmri_to_clusters
+    )
+    # plot
+    plot_similarity_analysis(
+        mean_within, mean_between, y_axis_label="mean cosine similarity"
+    )
+    plot_similarity_analysis(
+        median_within, median_between, y_axis_label="median cosine similarity"
+    )
 
 
 if __name__ == "__main__":
