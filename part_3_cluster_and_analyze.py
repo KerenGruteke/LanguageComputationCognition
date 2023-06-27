@@ -152,10 +152,18 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
     )
     # plot
     plot_similarity_analysis(
-        mean_within, mean_between, y_axis_label="mean cosine similarity"
+        mean_within,
+        mean_between,
+        y_axis_label="mean cosine similarity",
+        vector_type=vector_type,
+        k=k,
     )
     plot_similarity_analysis(
-        median_within, median_between, y_axis_label="median cosine similarity"
+        median_within,
+        median_between,
+        y_axis_label="median cosine similarity",
+        vector_type=vector_type,
+        k=k,
     )
 
 

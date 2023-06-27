@@ -198,9 +198,9 @@ def create_fmri_to_cluster(category_to_cluster, exp: Experiment):
     return fmri_dict
 
 
-def plot_similarity_analysis(within_distances, between_distance, y_axis_label, title):
+def plot_similarity_analysis(within_distances, between_distance, y_axis_label, vector_type, k):
     x_axis_label = "cluster num"
-    title = f"{y_axis_label} by {x_axis_label}"
+    title = f"{y_axis_label} within and between clusters of fMRI data"
     distances = list(within_distances.values())
     distances.append(between_distance)
     clusters_list = list(within_distances.keys())
