@@ -147,7 +147,8 @@ def analyze_clusters_distances(exp: Experiment, vector_type: str, k: int):
     distances = list(within_distances.values())
     between_distance = calculate_between_distance(fmri_to_clusters)
     distances.append(between_distance)
-    plt.bar(clusters_list, distances)
+    clusters_list_str = [str(i) for i in clusters_list]
+    plt.bar(clusters_list_str, distances)
     plt.xlabel("cluster num")
     plt.ylabel("distances")
     plt.title("within distance for each cluster")
