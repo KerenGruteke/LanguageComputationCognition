@@ -104,13 +104,13 @@ def run_kmeans(
     return cluster_nums_of_all_vectors, category_to_cluster, k
 
 
-def calculate_within_similatiry(cluster_dict):
+def calculate_within_similatiry(cluter_to_vecs: dict, cluter_to_names: dict):
     mean_within = {}
     median_within = {}
     similarity_values = {}
 
     # Iterate over each cluster in the dictionary
-    for cluster_num, vectors in cluster_dict.items():
+    for cluster_num, vectors in cluter_to_vecs.items():
         cluster_size = len(vectors)
         if cluster_size <= 1:
             mean_within[cluster_num] = 1
@@ -135,21 +135,24 @@ def calculate_within_similatiry(cluster_dict):
     return mean_within, median_within, similarity_values
 
 
-def calculate_between_similarity(cluster_dict):
+def calculate_between_similarity(cluter_to_vecs: dict, cluter_to_names: dict):
     # Compute the pairwise distances between centroids
-    cluster_nums = list(cluster_dict.keys())
+    cluster_nums = list(cluter_to_vecs.keys())
     num_clusters = len(cluster_nums)
     similarity_list = []
     for i in range(num_clusters):
         print(f"until cluster {i}: mean_between={np.mean(similarity_list)}")
         for j in range(i + 1, num_clusters):
-            cluster_i = cluster_dict[i]
-            cluster_j = cluster_dict[j]
-            for vec_i in cluster_i:
-                for vec_j in cluster_j:
+            cluster_i = cluter_to_vecs[i]
+            cluter_i_name = cluter_to_names[i]
+            cluster_j = cluter_to_vecs[j]
+            cluter_j_name = cluter_to_names[j]
+            for vec_i, name_i in zip(cluster_i, cluter_i_name):
+                for vec_j, name_j in zip(cluster_j, cluter_j_name):
                     # Calculate the pairwise distances between vectors in the cluster using cosine similarity
                     similarity = cosine_similarity(vec_i, vec_j)
                     similarity_list.append(similarity)
+                    print(f"sim {name_i}, {name_j} = {similarity}")
 
     # Calculate the average pairwise distance between centroids
     mean_between = np.mean(similarity_list)
@@ -184,18 +187,27 @@ def calculate_between_centorids_similarity(cluster_dict):
     return mean_between, median_between, similarity_list
 
 
-def create_vec_to_cluster(category_to_cluster, vectors, exp: Experiment, k: int):
-    vec_dict = {}
-    for cluster_num in range(k):
-        vec_dict[cluster_num] = []
+def create_cluster_to_vecs(category_to_cluster, vectors, categories_names, k: int):
+    if type(vectors[0]) == list:
+        vectors = [np.array(v) for v in vectors]
 
     vec_cluster_num_list = []
-    for cat in exp.categories_all_vectors:
+    for cat in categories_names:
         vec_cluster_num_list.append(category_to_cluster[cat])
-    for cluster, vec in zip(vec_cluster_num_list, vectors):
-        vec_dict[cluster].append(vec)
 
-    return vec_dict
+    cluster_to_vecs = {}
+    for cluster_num in range(k):
+        cluster_to_vecs[cluster_num] = []
+    for cluster, vec in zip(vec_cluster_num_list, vectors):
+        cluster_to_vecs[cluster].append(vec)
+
+    cluter_to_names = {}
+    for cluster_num in range(k):
+        cluter_to_names[cluster_num] = []
+    for cluster, name in zip(vec_cluster_num_list, categories_names):
+        cluter_to_names[cluster].append(name)
+
+    return cluster_to_vecs, cluter_to_names
 
 
 def plot_similarity_analysis(

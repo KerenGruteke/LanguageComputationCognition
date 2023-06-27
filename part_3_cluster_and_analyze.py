@@ -2,12 +2,18 @@ import random
 
 import numpy as np
 
-from clustering import (calculate_between_similarity,
-                        calculate_within_similatiry, create_vec_to_cluster,
-                        plot_similarity_analysis, run_kmeans)
+from clustering import (
+    calculate_between_similarity,
+    calculate_within_similatiry,
+    create_cluster_to_vecs,
+    plot_similarity_analysis,
+    run_kmeans,
+)
 from get_exp_data import Experiment
-from reduce_dimension_and_plot import (plot_reduced_vectors_with_labels,
-                                       reduce_dimension_and_plot)
+from reduce_dimension_and_plot import (
+    plot_reduced_vectors_with_labels,
+    reduce_dimension_and_plot,
+)
 
 # -----------------------------------------------------------------------------------------------------------------
 
@@ -125,6 +131,7 @@ def analyze_clusters_distances(
     vector_type_for_clustring: str,
     vector_type_for_analyzing: str,
     k: int,
+    method: str,
 ):
     # clustering
     _, avg_vectors_for_clustering = exp.get_vectors_by_type(
@@ -142,15 +149,34 @@ def analyze_clusters_distances(
     _, avg_vectors_for_analyzing = exp.get_vectors_by_type(
         vector_type=vector_type_for_analyzing
     )
-    vec_to_clusters = create_vec_to_cluster(
-        category_to_cluster=category_to_cluster, vectors=avg_vectors_for_analyzing, exp=exp, k=k
+    # plot clusters
+    avg_X_reduced = reduce_dimension_and_plot(
+        method=method,
+        vectors_matrix=np.array(avg_vectors_for_analyzing),
+    )
+    plot_reduced_vectors_with_labels(
+        method=method,
+        vector_type=vector_type_for_analyzing,
+        k=k,
+        labels=list(category_to_cluster.values()),
+        names=exp.categories_names,
+        X_reduced=avg_X_reduced,
+        plot_names=True,
+        before_after="before",
+    )
+
+    cluster_to_vecs, cluter_to_names = create_cluster_to_vecs(
+        category_to_cluster=category_to_cluster,
+        vectors=avg_vectors_for_analyzing,
+        categories_names=exp.categories_names,
+        k=k,
     )
     # calc similarity
     mean_within, median_within, similarity_values = calculate_within_similatiry(
-        vec_to_clusters
+        cluster_to_vecs, cluter_to_names
     )
     mean_between, median_between, similarity_list = calculate_between_similarity(
-        vec_to_clusters
+        cluster_to_vecs, cluter_to_names
     )
     # plot
     plot_similarity_analysis(
@@ -203,4 +229,5 @@ if __name__ == "__main__":
             vector_type_for_clustring="Glove",
             vector_type_for_analyzing="Glove",
             k=k,
+            method="TSNE"
         )

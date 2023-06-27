@@ -1,3 +1,4 @@
+import copy
 import pickle
 from pathlib import Path
 
@@ -100,6 +101,7 @@ class Experiment:
         return vec_to_category
 
     def get_avg_vectors_per_category(self, vectors):
+        vectors = copy.deepcopy(vectors)
         avg_vectors_per_category = {}
         for category_name in self.categories_names:
             avg_vectors_per_category[category_name] = 0
