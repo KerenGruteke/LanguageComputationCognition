@@ -53,4 +53,8 @@ def get_clusters_similarity(
 
 if __name__ == "__main__":
     get_clusters_similarity(vec_type_1="fMRI", vec_type_2="Glove", k=5)
+    get_clusters_similarity(vec_type_1="fMRI", vec_type_2="BERT", k=5)
+    get_clusters_similarity(vec_type_1="BERT", vec_type_2="Glove", k=5)
     get_clusters_similarity(vec_type_1="fMRI", vec_type_2="Glove", k=10)
+    get_clusters_similarity(vec_type_1="fMRI", vec_type_2="BERT", k=10)
+    get_clusters_similarity(vec_type_1="BERT", vec_type_2="Glove", k=10)

@@ -10,6 +10,7 @@ from clustering import (
     plot_similarity_analysis,
     run_kmeans,
 )
+from clusters_similarity import get_clusters_similarity
 from get_exp_data import Experiment
 from reduce_dimension_and_plot import (
     plot_reduced_vectors_with_labels,
@@ -203,8 +204,15 @@ def analyze_clusters_distances(
         k=k,
     )
 
+
 def analyze_clusters_similarity():
-    pass
+    get_clusters_similarity(vec_type_1="fMRI", vec_type_2="Glove", k=5)
+    get_clusters_similarity(vec_type_1="fMRI", vec_type_2="BERT", k=5)
+    get_clusters_similarity(vec_type_1="BERT", vec_type_2="Glove", k=5)
+    get_clusters_similarity(vec_type_1="fMRI", vec_type_2="Glove", k=10)
+    get_clusters_similarity(vec_type_1="fMRI", vec_type_2="BERT", k=10)
+    get_clusters_similarity(vec_type_1="BERT", vec_type_2="Glove", k=10)
+
 
 if __name__ == "__main__":
     random.seed(42)
@@ -238,12 +246,12 @@ if __name__ == "__main__":
             vector_type_for_clustring="Glove",
             vector_type_for_analyzing="Glove",
             k=k,
-            method="TSNE"
+            method="TSNE",
         )
         analyze_clusters_distances(
             exp=exp_3,
             vector_type_for_clustring="Glove",
             vector_type_for_analyzing="fMRI",
             k=k,
-            method="TSNE"
+            method="TSNE",
         )
