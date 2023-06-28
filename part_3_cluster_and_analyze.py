@@ -192,17 +192,18 @@ def analyze_clusters_distances(
         vector_type_for_clustring=vector_type_for_clustring,
         vector_type_for_analyzing=vector_type_for_analyzing,
         mean_all=mean_all,
-        k=k,
-    )
-    plot_similarity_analysis(
-        median_within,
-        median_between,
-        y_axis_label="median cosine similarity",
-        vector_type_for_clustring=vector_type_for_clustring,
-        vector_type_for_analyzing=vector_type_for_analyzing,
         median_all=median_all,
         k=k,
     )
+    # plot_similarity_analysis(
+    #     median_within,
+    #     median_between,
+    #     y_axis_label="median cosine similarity",
+    #     vector_type_for_clustring=vector_type_for_clustring,
+    #     vector_type_for_analyzing=vector_type_for_analyzing,
+    #     median_all=median_all,
+    #     k=k,
+    # )
 
 
 def analyze_clusters_similarity():
@@ -218,7 +219,7 @@ if __name__ == "__main__":
     random.seed(42)
     # exp_1 = Experiment(exp_num=1)
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
-    exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
+    # exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
     # # explore k meands and reducing dimensions
     # for method in ["TSNE"]:
@@ -240,18 +241,20 @@ if __name__ == "__main__":
     #         # )
 
     # analyze_clusters_distances
-    for k in [5, 10]:
-        analyze_clusters_distances(
-            exp=exp_3,
-            vector_type_for_clustring="Glove",
-            vector_type_for_analyzing="Glove",
-            k=k,
-            method="TSNE",
-        )
-        analyze_clusters_distances(
-            exp=exp_3,
-            vector_type_for_clustring="Glove",
-            vector_type_for_analyzing="fMRI",
-            k=k,
-            method="TSNE",
-        )
+    # for k in [5, 10]:
+    #     # analyze_clusters_distances(
+    #     #     exp=exp_3,
+    #     #     vector_type_for_clustring="Glove",
+    #     #     vector_type_for_analyzing="Glove",
+    #     #     k=k,
+    #     #     method="TSNE",
+    #     # )
+    #     analyze_clusters_distances(
+    #         exp=exp_3,
+    #         vector_type_for_clustring="Glove",
+    #         vector_type_for_analyzing="fMRI",
+    #         k=k,
+    #         method="TSNE",
+    #     )
+
+    analyze_clusters_similarity()

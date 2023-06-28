@@ -240,7 +240,7 @@ def plot_similarity_analysis(
     if median_all:
         plt.axhline(median_all, color="r", linestyle="--", label="Median")
         plt.text(
-            0.5,
+            5,
             median_all,
             f"Median: {median_all:.2f}",
             color="r",

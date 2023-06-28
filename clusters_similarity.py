@@ -10,10 +10,10 @@ def get_clusters_similarity(
     before_after: str = "before",
 ):
     clusters_1_df = pd.read_csv(
-        f"results/clustering {before_after} {method} {vec_type_1} k={k}.csv"
+        f"results/cluster similarities/clustering {before_after} {method} {vec_type_1} k={k}.csv"
     )
     clusters_2_df = pd.read_csv(
-        f"results/clustering {before_after} {method} {vec_type_2} {k=}.csv"
+        f"results/cluster similarities/clustering {before_after} {method} {vec_type_2} {k=}.csv"
     )
     dfs = [clusters_1_df, clusters_2_df]
     names = clusters_1_df["names"].unique()
@@ -42,13 +42,15 @@ def get_clusters_similarity(
                 agree_results.append(0)  # disagree
                 score_results.append(0)
 
-    decisions = np.round(np.mean(agree_results), 2)
-    score = np.round(np.mean(score_results), 2)
+    decisions = np.round(np.mean(agree_results), 1)
+    score = np.round(np.mean(score_results), 1)
 
     print(
         f"{k=}: {vec_type_1} and {vec_type_2} clustering results agree on {decisions*100}% of their decisions"
     )
-    print(f"{k=}: {vec_type_1} and {vec_type_2} clustering similarity score={score*100}")
+    print(
+        f"{k=}: {vec_type_1} and {vec_type_2} clustering similarity score={score*100}"
+    )
 
 
 if __name__ == "__main__":
