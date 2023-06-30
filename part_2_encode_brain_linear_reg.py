@@ -17,8 +17,7 @@ def calc_P_matrix(X):
 
 
 def linear_regression_model(fMRI_data, embeddings):
-    my_array = np.array(embeddings)
-    n_embeddings = my_array.shape[0]
+    n_embeddings = np.array(embeddings).shape[0]
     print(n_embeddings)
     X = np.c_[np.ones(n_embeddings), embeddings]
     P = calc_P_matrix(X)
@@ -44,13 +43,13 @@ def linear_regression_model(fMRI_data, embeddings):
     return R_squared_scores
 
 
-def p_value(r2_data, k, n):
+def p_value(R_squared_scores, k, n):
     p_vals = []
     # Calculate the degrees of freedom for the F-test
     df_model = k - 1
     df_residual = n - k
     # df_total = n - 1
-    for r2 in r2_data:
+    for r2 in R_squared_scores:
         # Calculate the F-statistic
         f_statistic = (r2 / df_model) / ((1 - r2) / df_residual)
 
