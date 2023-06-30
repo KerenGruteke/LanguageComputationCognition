@@ -151,21 +151,25 @@ def analyze_clusters_distances(
     _, avg_vectors_for_analyzing = exp.get_vectors_by_type(
         vector_type=vector_type_for_analyzing
     )
-    # plot clusters
-    avg_X_reduced = reduce_dimension_and_plot(
-        method=method,
-        vectors_matrix=np.array(avg_vectors_for_analyzing),
-    )
-    plot_reduced_vectors_with_labels(
-        method=method,
-        vector_type=vector_type_for_analyzing,
-        k=k,
-        labels=list(category_to_cluster.values()),
-        names=exp.categories_names,
-        X_reduced=avg_X_reduced,
-        plot_names=True,
-        before_after="before",
-    )
+    for avg_vectors, vector_type in zip(
+        [avg_vectors_for_analyzing, avg_vectors_for_clustering],
+        [vector_type_for_analyzing, vector_type_for_clustring],
+    ):
+        # plot clusters
+        avg_X_reduced = reduce_dimension_and_plot(
+            method=method,
+            vectors_matrix=np.array(avg_vectors),
+        )
+        plot_reduced_vectors_with_labels(
+            method=method,
+            vector_type=vector_type,
+            k=k,
+            labels=list(category_to_cluster.values()),
+            names=exp.categories_names,
+            X_reduced=avg_X_reduced,
+            plot_names=True,
+            before_after="before",
+        )
 
     cluster_to_vecs, cluter_to_names = create_cluster_to_vecs(
         category_to_cluster=category_to_cluster,
@@ -219,7 +223,7 @@ if __name__ == "__main__":
     random.seed(42)
     # exp_1 = Experiment(exp_num=1)
     # exp_2 = Experiment(exp_num=2, get_bert_decoding=True)
-    # exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
+    exp_3 = Experiment(exp_num=3, get_bert_decoding=False)
 
     # # explore k meands and reducing dimensions
     # for method in ["TSNE"]:
@@ -251,7 +255,7 @@ if __name__ == "__main__":
     #     # )
     #     analyze_clusters_distances(
     #         exp=exp_3,
-    #         vector_type_for_clustring="Glove",
+    #         vector_type_for_clustring="fMRI",
     #         vector_type_for_analyzing="fMRI",
     #         k=k,
     #         method="TSNE",
