@@ -1,7 +1,13 @@
-import BERT_functions as BERT
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
+
 from get_exp_data import Experiment
-import learn_decoder as decoder
-import numpy as np 
+
+RESULTS_PATH = Path("results")
+
 
 def calc_P_matrix(X):
     C = np.matmul(X.T, X)
@@ -20,7 +26,7 @@ def linear_regression_model(fMRI_data, embeddings):
     R_squared_scores = []
     n_voxels = range(fMRI_data.shape[1])
     for voxel_id in n_voxels:
-        y = fMRI_data[: ,voxel_id]
+        y = fMRI_data[:, voxel_id]
         beta_hat = np.matmul(P, y)
         y_hat = np.matmul(X, beta_hat)
         y_mean = np.mean(y)
@@ -35,29 +41,67 @@ def linear_regression_model(fMRI_data, embeddings):
         R_squared = SSR / SST
         R_squared_scores.append(R_squared)
 
-        # print(f"{SSR=}")
-        # print(f"{SST=}")
-        # print(f"{SSres=}")
-        # print(f"{R_squared=}")
     return R_squared_scores
 
 
-# # def encode_brain_vectors():
-# #     # BERT
-# #     # Read sentences from file
-# #     # file_path = "C:\Users\Hadar\Desktop\NLP_cognition_new\DATA\stimuli_243sentences.txt"
-# #     # with open(file_path, 'r') as file:
-# #     #     sentences = file.readlines()
-# #     # sentences = [sentence.strip() for sentence in sentences]
-# #     # representations = BERT.extract_sentence_representation(sentences)
-# file_path = 'DATA/stimuli_243sentences.txt'
-# with open(file_path, 'r') as file:
-#     # Read the contents of the file
-#     contents = file.read()
+def p_value(r2_data, k, n):
+    p_vals = []
+    # Calculate the degrees of freedom for the F-test
+    df_model = k - 1
+    df_residual = n - k
+    # df_total = n - 1
+    for r2 in r2_data:
+        # Calculate the F-statistic
+        f_statistic = (r2 / df_model) / ((1 - r2) / df_residual)
 
-exp_3 = Experiment(exp_num=3)
-vectors_exp3 = exp_3.stimuli_text
-vectors_exp3 = decoder.read_matrix(vectors_exp3, sep=" ")
-Fmridata = exp_3.fmri_data
-x = linear_regression_model(Fmridata, vectors_exp3)
+        # Calculate the p-value
+        p_value = 1 - stats.f.cdf(f_statistic, df_model, df_residual)
+        p_vals.append(p_value)
+        # print("R^2:", r2)
+        # print("F-Statistic:", f_statistic)
 
+    return p_vals
+
+
+def plot_R_squared(R_squared_scores, vector_type: str):
+    plt.hist(R_squared_scores, bins=10, edgecolor="black")
+    plt.title(f"{vector_type} Linear Regression R-squared values")
+    plt.xlabel("R-squared")
+    plt.ylabel("Count")
+    plt.savefig(RESULTS_PATH / f"{vector_type} Linear Regression R-squared values.jpg")
+    plt.clf()
+
+
+def plot_p_values(p_vals, vector_type: str):
+    plt.hist(p_vals, bins=10, edgecolor="black")
+    plt.title(f"{vector_type} Linear Regression p values")
+    plt.xlabel("p_value")
+    plt.ylabel("Count")
+    plt.savefig(RESULTS_PATH / f"{vector_type} Linear Regression p values.jpg")
+    plt.clf()
+
+
+def run_and_analyze(language_vectors, fmri_vectors, vector_type: str):
+    n = fmri_vectors.shape[1]  # Number of observations -> 243
+    k = language_vectors.shape[1]  # Number of independent variables -> 300
+
+    R_squared_scores = linear_regression_model(
+        fMRI_data=fmri_vectors, embeddings=language_vectors
+    )
+    plot_R_squared(R_squared_scores=R_squared_scores, vector_type=vector_type)
+    p_vals = p_value(R_squared_scores=R_squared_scores, k=k, n=n)
+    plot_p_values(p_vals=p_vals, vector_type=vector_type)
+
+
+if __name__ == "__main__":
+    exp_3 = Experiment(exp_num=3, get_bert_decoding=True)
+    run_and_analyze(
+        language_vectors=exp_3.glove_vectors,
+        fmri_vectors=exp_3.fmri_data,
+        vector_type="Glove",
+    )
+    run_and_analyze(
+        language_vectors=exp_3.bert_vectors,
+        fmri_vectors=exp_3.fmri_data,
+        vector_type="BERT",
+    )
