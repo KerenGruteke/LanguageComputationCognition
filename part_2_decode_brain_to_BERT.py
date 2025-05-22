@@ -76,3 +76,17 @@ def decode_brain_to_BERT():
 
 if __name__ == "__main__":
     decode_brain_to_BERT()
+
+# --- part 1 ---
+# M(fmri_1, glove_1)
+# fmri_2 x M ?= glove_2
+# fmri_3 x M ?= glove_3
+
+
+# ---part 2 ---
+
+# M(fmri_2, bert_2)
+# fmri_3 x M ?= bert_3
+
+# M(fmri_2, glove_2)
+# fmri_3 x M ?= glove_3

@@ -80,8 +80,7 @@ class Experiment:
         elif exp_num == 1:
             self.stimuli_text = np.genfromtxt(stimuli_text_path, dtype=np.dtype("U"))
             self.glove_vectors = read_matrix(glove_vectors_path, sep=" ")
-            # replace FMRI data because have bug in original file
-            self.fmri_data = read_matrix(DATA_PATH / "modified_file.csv", sep=",")
+            self.fmri_data = read_matrix(DATA_PATH / "neuralData_for_EXP1.csv", sep=",", fmri_exp_1=True)
 
         if get_bert_decoding:
             sentences_exp = [sentence.strip() for sentence in stimuli_text]
